@@ -14,7 +14,6 @@ function lowestPriceInCities(array) {
                               let sorted = Object.entries(product[1]).sort((a, b) => a[1] - b[1]);
                               console.log(`${product[0]} -> ${sorted[0][1]} (${sorted[0][0]})`)
                }
-
 }
 lowestPriceInCities(['Sample Town | Sample Product | 1000',
                'Sample Town | Orange | 2',
