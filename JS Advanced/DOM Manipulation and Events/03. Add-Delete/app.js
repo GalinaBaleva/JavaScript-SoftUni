@@ -1,21 +1,22 @@
 function addItem() {
-    const newText = document.getElementById("newItemText").value;
+    const newText = document.getElementById("newItemText");
 
-    let newLiItem = document.createElement("li");
-    newLiItem.textContent = newText;
-    
-    let deleteLinc = document.createElement("a");
-    deleteLinc.href = "#";
-    deleteLinc.textContent = `[Delete]`;
-    deleteLinc.addEventListener('click', removingItem);
-    
-    newLiItem.appendChild(deleteLinc);
-    document.getElementById("items").appendChild(newLiItem);
+    let newLiElement = document.createElement('li');
+    newLiElement.textContent = newText.value;
 
+    let button = document.createElement('a');
+    button.href = "#";
+    button.textContent = `[Delete]`;
+    button.addEventListener("click", removingItem);
+    newLiElement.appendChild(button);
 
-    function removingItem(ev) {
-        const parent = ev.target.parentNode;
+    document.getElementById('items').appendChild(newLiElement);
+
+    newText.value = "";
+
+    function removingItem(ev){
+        let parent = ev.target.parentNode;
         parent.remove();
-        
     }
+
 }
