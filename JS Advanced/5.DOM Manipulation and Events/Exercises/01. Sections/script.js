@@ -1,6 +1,6 @@
 function create(words) {
    const contentDiv = document.getElementById('content');
-   let eventListener = contentDiv.addEventListener('click', onClick);
+   const eventListener = contentDiv.addEventListener('click', onClick);
 
    for (let word of words) {
       const newDivElement = document.createElement('div');
