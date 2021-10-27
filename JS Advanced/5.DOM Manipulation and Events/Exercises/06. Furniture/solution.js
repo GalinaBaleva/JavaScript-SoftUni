@@ -11,40 +11,62 @@ function solve() {
         for (let product of textArea) {
             let row = document.createElement('tr');
 
-            let colonImg = document.createElement('td');
-            let colonName = document.createElement('td');
-            let colonPrice = document.createElement('td');
-            let colonDecFactor = document.createElement('td');
-            let colonCheckbox = document.createElement('td');
+            // let colonImg = document.createElement('td');
+            // let colonName = document.createElement('td');
+            // let colonPrice = document.createElement('td');
+            // let colonDecFactor = document.createElement('td');
+            // let colonCheckbox = document.createElement('td');
 
-            let img = document.createElement('img');
-            let pName = document.createElement('p');
-            let pPrice = document.createElement('p');
-            let pDecFactor = document.createElement('p');
-            let inputCheckbox = document.createElement('input');
+            // let img = document.createElement('img');
+            // let pName = document.createElement('p');
+            // let pPrice = document.createElement('p');
+            // let pDecFactor = document.createElement('p');
+            // let inputCheckbox = document.createElement('input');
 
-            img.src = product.img;
-            pName.textContent = product.name;
-            pPrice.textContent = Number(product.price);
-            pDecFactor.textContent = Number(product.decFactor);
-            inputCheckbox.type = 'checkbox';
+            // img.src = product.img;
+            // pName.textContent = product.name;
+            // pPrice.textContent = Number(product.price);
+            // pDecFactor.textContent = Number(product.decFactor);
+            // inputCheckbox.type = 'checkbox';
 
-            colonImg.appendChild(img);
-            colonName.appendChild(pName);
-            colonPrice.appendChild(pPrice);
-            colonDecFactor.appendChild(pDecFactor);
-            colonCheckbox.appendChild(inputCheckbox);
+            // colonImg.appendChild(img);
+            // colonName.appendChild(pName);
+            // colonPrice.appendChild(pPrice);
+            // colonDecFactor.appendChild(pDecFactor);
+            // colonCheckbox.appendChild(inputCheckbox);
 
-            row.appendChild(colonImg);
-            row.appendChild(colonName);
-            row.appendChild(colonPrice);
-            row.appendChild(colonDecFactor);
-            row.appendChild(colonCheckbox);
+            // row.appendChild(colonImg);
+            // row.appendChild(colonName);
+            // row.appendChild(colonPrice);
+            // row.appendChild(colonDecFactor);
+            // row.appendChild(colonCheckbox);
+
+            row.appendChild(createCell('img', {src: product.img}));
+            row.appendChild(createCell('p', {}, product.name));
+            row.appendChild(createCell('p', {}), product.price);
+            row.appendChild(createCell('p', {}, product.decFactor));
+            row.appendChild(createCell('input', {type: 'checkbox'}));
 
             let newRowAppending = divExercise.getElementsByTagName('tbody')[0];
             newRowAppending.appendChild(row);
         }
     }
+    function createCell (nestedTag, props, content){
+        let cell = document.createElement('td');
+        let nested = document.createElement(nestedTag);
+
+        for(let prop in props){
+            nested[prop] = props[prop];
+        }
+        if(content){
+            nested.textContent = content;
+        }
+        cell.appendChild(nested);
+
+        return cell;
+
+    }
+
     function buy(e) {
         let checkedBoxes = Array.from(divExercise.querySelectorAll('input[type="checkbox"]:checked'));
         let boughtedProducts = [];
@@ -56,15 +78,10 @@ function solve() {
             boughtedProducts.push(parent[1].textContent);
             totalPrice += Number(parent[2].textContent);
             avDecFactor += Number(parent[3].textContent);
-
-
         }
-
         secondTextArea.textContent = `Bought furniture: ${boughtedProducts.join(', ')}
-Total price: ${totalPrice}
+Total price: ${totalPrice.toFixed(2)}
 Average decoration factor: ${avDecFactor /= checkedBoxes.length}`
 
     }
-
-
 }
