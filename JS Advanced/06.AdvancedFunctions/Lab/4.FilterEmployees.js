@@ -1,21 +1,34 @@
-function solve(array, criteria){
-               const arrayParsed = JSON.parse(array); 
-               let result = [];
-               
-               if(criteria === 'all'){
-                              for(let person of arrayParsed){
-                                             result.push(`${person.first_name} ${person.last_name} - ${person.email}`);
+// function solve(array, criteria){
+//                const arrayParsed = JSON.parse(array); 
+//                let result = [];
+
+//                if(criteria === 'all'){
+//                               for(let person of arrayParsed){
+//                                              result.push(`${person.first_name} ${person.last_name} - ${person.email}`);
+//                               }
+//                } else {
+//                               let [nameCriteria, valueCriteria] = criteria.split('-');
+//                               for(let person of arrayParsed){
+//                                              if(person[nameCriteria] === valueCriteria){
+//                                                             result.push(`${person.first_name} ${person.last_name} - ${person.email}`);
+//                                              }
+//                               }
+//                }
+//                for(let i = 0; i < result.length; i++){
+//                               console.log(`${i}. ${result[i]}`);
+//                }
+// }
+
+function solve(persons, criteria) {
+               const [nameCriteria, valueCriteria] = criteria.split('-');
+               let counter = 0;
+
+               JSON.parse(persons).forEach(person => criteriaFilter.call(person));
+
+               function criteriaFilter() {
+                              if (this[nameCriteria] === valueCriteria || criteria == 'all') {
+                                             return console.log(`${counter++}. ${this.first_name} ${this.last_name} - ${this.email}`)
                               }
-               } else {
-                              let [nameCriteria, valueCriteria] = criteria.split('-');
-                              for(let person of arrayParsed){
-                                             if(person[nameCriteria] === valueCriteria){
-                                                            result.push(`${person.first_name} ${person.last_name} - ${person.email}`);
-                                             }
-                              }
-               }
-               for(let i = 0; i < result.length; i++){
-                              console.log(`${i}. ${result[i]}`);
                }
 }
 
@@ -46,4 +59,4 @@ solve(`[{
                "email": "ev2@hostgator.com",
                "gender": "Male"
              }]`,
-            'last_name-Johnson');
+               'last_name-Johnson');
