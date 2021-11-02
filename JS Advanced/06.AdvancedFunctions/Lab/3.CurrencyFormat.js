@@ -4,9 +4,9 @@ function currencyFormatter(separator, symbol, symbolFirst, value) {
                if (symbolFirst) return symbol + ' ' + result;
                else return result + ' ' + symbol;
 }
-function createFormatter(separator, symbo, symbolFirst, currencyFormatter){
-               let formatter = function(value){
-                              return currencyFormatter(separator, symbo, symbolFirst, value)
+function createFormatter(separator, symbol, symbolFirst, currencyFormatter){
+               let formatter = function (value){
+                              return currencyFormatter(separator, symbol, symbolFirst, value);
                }
                return formatter;
 }
