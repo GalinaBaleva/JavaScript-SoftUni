@@ -49,14 +49,9 @@ function solution(input) {
                               } else if (command === 'report') {
                                              result = report();
                               }
-                              
                               return result;
                };
-
                return result;
-
-
-
 }
 let manager = solution();
 // console.log(manager("restock flavour 50"))
