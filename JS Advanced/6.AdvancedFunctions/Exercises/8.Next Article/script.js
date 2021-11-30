@@ -1,6 +1,5 @@
 
 function getArticleGenerator(articles) {
-    console.log(...articles)
 
     let divArticle = document.getElementById('content');
     function generating() {
