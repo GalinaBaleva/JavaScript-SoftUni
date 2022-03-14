@@ -2,7 +2,9 @@ class Textbox {
     constructor(selector, regex) {
         this._invalidSymbols = regex;
         this._elements = document.querySelectorAll(selector);
-        Array.from(this._elements).forEach(el => el.addEventListener('click', () => this.value = el.value));
+        Array.from(this._elements).forEach(el => el.addEventListener('click', () =>{ 
+            console.log(this.value )
+            this.value = el.value}));
     };
 
     get elements() {
