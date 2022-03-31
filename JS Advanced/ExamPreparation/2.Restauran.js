@@ -3,7 +3,7 @@ class Restaurant {
                               this.budgetMoney =budget;
                               this.menu = {};
                               this.stockProducts = {};
-                              this._history = [];
+                              this.history = [];
                };
                loadProducts(stringsArr){
                               for(let products of stringsArr){
@@ -16,18 +16,14 @@ class Restaurant {
                                                             } else {
                                                                            this.stockProducts[prodName] = prodQuantity; 
                                                             };
-                                                            this.budgetMoney -= prodTotalPrice;
-                                                            this._history.push(`Successfully loaded ${prodQuantity} ${prodName}`)
+                                                           this.budgetMoney -= prodTotalPrice;
+                                                            this.history.push(`Successfully loaded ${prodQuantity} ${prodName}`)
                                              } else {
-                                                            this._history.push(`There was not enough money to load ${prodQuantity} ${prodName}`)
+                                                            this.history.push(`There was not enough money to load ${prodQuantity} ${prodName}`)
                                              }
                               }
-                              return this._history.join('\n');
+                              return this.history.join('\n');
                }
-               // get history (){
-               //                let result = this._history.join('\n');
-               //                return {result};
-               // }
 
                addToMenu(meal, neededProudcts, price){
                               price = Number(price);
@@ -65,12 +61,11 @@ class Restaurant {
                                              for(let prod of neededProudcts){
                                                             let [product, quantity] = prod.split(' ');
                                                             let quantityWeHave = this.stockProducts[product];
-                                                            if(quantityWeHave >= quantity){
+                                                            if(!this.stockProducts[product] || quantityWeHave < quantity){
+                                                                           isTrue = false
+                                                            } else {
                                                                            isTrue = true;
                                                                            this.stockProducts[product] -= quantity;
-
-                                                            } else {
-                                                                           false;
                                                             }
                                              };
                                              if(isTrue){
