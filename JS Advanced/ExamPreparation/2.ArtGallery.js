@@ -37,23 +37,44 @@ class ArtGallery {
     this.guests.push({ guestName, points, purcheseArticle: 0 })
     return `You have successfully invited ${guestName}!`
   };
-  buyArticle(artModel, artName, guestName){
-    let indexArt = this.listOfArticles.find(art => art.artName == artName && art.artModel == artModel);
+  buyArticle(artModel, artName, guestName) {
+    let indexArt = this.listOfArticles.findIndex(art => art.artName == artName && art.artModel == artModel);
     let indexGuest = this.guests.findIndex(guest => guest.guestName == guestName);
-    if(indexArt < 0){
+    if (indexArt < 0) {
       throw new Error(`This article is not found.`);
     };
-    if(this.listOfArticles[indexArt].quantity == 0){
+    if (this.listOfArticles[indexArt].quantity == 0) {
       return `The ${artName} is not available.`
     };
-    if(indexGuest < 0){
+    if (indexGuest < 0) {
       return `This guest is not invited.`
     }
-    let neededPoints = this.possibleArticlesMosels[artName]
-    if(this.guests[indexGuest].points < neededPoints){
+    let neededPoints = this.possibleArticlesMosels[artModel]
+    if (this.guests[indexGuest].points < neededPoints) {
       return `You need to more points to purchase the article.`
     };
+    
+    this.guests[indexGuest].points -= neededPoints;
+    this.guests[indexGuest].purcheseArticle += 1;
+    this.listOfArticles[indexArt].quantity -= 1;
 
+    return `${guestName} successfully purchased the article worth ${neededPoints} points.`;
+
+  }
+  showGalleryInfo(criteria){
+    let result = [];
+    if(criteria == 'article'){
+      result.push(`Articles information:`);
+      for(let art of this.listOfArticles){
+        result.push(`${art.artModel} - ${art.artName} - ${art.quantity}`)
+      }
+    } else if('guest'){
+      result.push(`Guests information:`);
+      for(let guest of this.guests){
+        result.push(`${guest.guestName} - ${guest.purcheseArticle}`)
+      }
+    }
+    return result.join('\n');
   }
 }
 // const artGallery = new ArtGallery('Curtis Mayfield');
@@ -74,15 +95,15 @@ class ArtGallery {
  You have successfully invited Peter!
  John has already been invited.*/
 
-const artGallery3 = new ArtGallery('Curtis Mayfield');
-artGallery3.addArticle('picture', 'Mona Liza', 3);
-artGallery3.addArticle('Item', 'Ancient vase', 2);
-artGallery3.addArticle('picture', 'Mona Liza', 1);
-artGallery3.inviteGuest('John', 'Vip');
-artGallery3.inviteGuest('Peter', 'Middle');
-console.log(artGallery3.buyArticle('picture', 'Mona Liza', 'John'));
-console.log(artGallery3.buyArticle('item', 'Ancient vase', 'Peter'));
-console.log(artGallery3.buyArticle('item', 'Mona Liza', 'John'));
+// const artGallery3 = new ArtGallery('Curtis Mayfield');
+// artGallery3.addArticle('picture', 'Mona Liza', 3);
+// artGallery3.addArticle('Item', 'Ancient vase', 2);
+// artGallery3.addArticle('picture', 'Mona Liza', 1);
+// artGallery3.inviteGuest('John', 'Vip');
+// artGallery3.inviteGuest('Peter', 'Middle');
+// console.log(artGallery3.buyArticle('picture', 'Mona Liza', 'John'));
+// console.log(artGallery3.buyArticle('item', 'Ancient vase', 'Peter'));
+// console.log(artGallery3.buyArticle('item', 'Mona Liza', 'John'));
 
 /*John successfully purchased the article worth 200 points.
  Peter successfully purchased the article worth 250 points. 
