@@ -80,7 +80,7 @@ function solve() {
         let element = document.createElement(type);
 
         for (let atribut in atr) {
-            element[atribut] = atr[atribut];
+            element[atribut] += atr[atribut];
         };
         return element;
     }
