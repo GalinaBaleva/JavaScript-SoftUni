@@ -14,7 +14,6 @@ async function getInfo() {
             throw new Error(`Error`);
         }
         const data = await response.json();
-        console.log(data)
 
         resultName.textContent = data.name;
         Object.entries(data.buses).forEach(el => {
