@@ -4,8 +4,6 @@ function attachEvents() {
     getWatherButton.addEventListener('click', getWather);
 
     let url = `http://localhost:3030/jsonstore/forecaster/`;
-    //const divToday = document.getElementById('current');
-    //const divTree = document.getElementById('upcoming');
 
     const wether = {
         'Sunny': '☀',
@@ -15,39 +13,52 @@ function attachEvents() {
         'Degrees': '°'
     }
 
-
     async function getWather() {
         let divForestCast = document.getElementById('forecast');
-
-
-
         divForestCast.style.display = 'none';
 
-        const location = document.getElementById('location').value;
+        let location = document.getElementById('location');
 
         try {
             const responsGetCode = errorChecker('locations', undefined, undefined);
             const getLocationsCode = await responsGetCode;
-            const code = getLocationsCode.filter(loc => loc.name == location);
+            const code = getLocationsCode.filter(loc => loc.name == location.value);
             if (code.length == 0) {
                 throw new Error(`Error`);
             };
-            const todayResponse = errorChecker(undefined, 'today', code[0].code);
-            const threeDaysResponse = errorChecker(undefined, 'upcoming', code[0].code);
-            const todayData = await todayResponse;
-            const threeDays = await threeDaysResponse;
+            const [todayResponse, threeDaysResponse] = await Promise.all([errorChecker(undefined, 'today', code[0].code), errorChecker(undefined, 'upcoming', code[0].code)]);
 
-            today(todayData);
-            three(threeDays);
+            today(todayResponse);
+            three(threeDaysResponse);
 
             divForestCast.style.display = 'block';
+            location.value = '';
 
         } catch (error) {
             divForestCast.style.display = 'block';
-            divForestCast.textContent = `${error.message}`;
+            const divToday = document.getElementById('current');
+            let divCurrent = divToday.querySelectorAll('div');
+            if (divCurrent[1] != undefined) {
+                divCurrent[1].remove();
+            }
+
+            const divTree = document.getElementById('upcoming');
+            let divUpcoming = divTree.querySelectorAll('div');
+            if (divUpcoming[1] != undefined) {
+                let toRemove = Array.from(divUpcoming).splice(1);
+                toRemove.forEach(el => el.remove())
+            }
+            let divErrorToday = el('div', 'forecasts', error.message);
+            divToday.appendChild(divErrorToday);
+
+            let divError = el('div', 'forecasts', error.message);
+            divTree.appendChild(divError);
             return;
         }
+
+
     }
+
 
     function today(obj) {
         let forecasts = document.getElementsByClassName('forecasts');
@@ -125,7 +136,7 @@ function attachEvents() {
         return elTag;
     }
 
-
 }
+
 
 attachEvents();
