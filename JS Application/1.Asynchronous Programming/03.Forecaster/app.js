@@ -1,41 +1,92 @@
 function attachEvents() {
-    const location = document.getElementById('location').value;
-    let divForestCast = document.getElementById('forecast');
+
     const getWatherButton = document.getElementById('submit');
     getWatherButton.addEventListener('click', getWather);
 
     let url = `http://localhost:3030/jsonstore/forecaster/`;
+    //const divToday = document.getElementById('current');
+    //const divTree = document.getElementById('upcoming');
 
     const wether = {
-        'Sunny': '#x2600',
-        'Partly sunny': '#x26C5',
-        'Overcast': '#x2601',
-        'Rain': '#x2614',
-        'Degrees': '#176'
+        'Sunny': '☀',
+        'Partly sunny': '⛅',
+        'Overcast': '☁',
+        'Rain': '☂',
+        'Degrees': '°'
     }
 
+
     async function getWather() {
-
-        const responsGetCode = errorChecker('locations', undefined, undefined);
-        const getLocationsCode = await responsGetCode;
-        const code = getLocationsCode.filter(loc => loc.name == location);
+        let divForestCast = document.getElementById('forecast');
 
 
-        const todayResponse = errorChecker(undefined, 'today', code[0].code);
-        const threeDaysResponse = errorChecker(undefined, 'upcoming', code[0].code);
-        const todayData = await todayResponse;
-        const threeDays = await threeDaysResponse;
 
-        today(todayData)
-        three(threeDays)
+        divForestCast.style.display = 'none';
+
+        const location = document.getElementById('location').value;
+
+        try {
+            const responsGetCode = errorChecker('locations', undefined, undefined);
+            const getLocationsCode = await responsGetCode;
+            const code = getLocationsCode.filter(loc => loc.name == location);
+            if (code.length == 0) {
+                throw new Error(`Error`);
+            };
+            const todayResponse = errorChecker(undefined, 'today', code[0].code);
+            const threeDaysResponse = errorChecker(undefined, 'upcoming', code[0].code);
+            const todayData = await todayResponse;
+            const threeDays = await threeDaysResponse;
+
+            today(todayData);
+            three(threeDays);
+
+            divForestCast.style.display = 'block';
+
+        } catch (error) {
+            divForestCast.style.display = 'block';
+            divForestCast.textContent = `${error.message}`;
+            return;
+        }
     }
 
     function today(obj) {
-        console.log(obj)
+        let forecasts = document.getElementsByClassName('forecasts');
+        if (forecasts.length !== 0) {
+            forecasts[0].remove()
+        }
+        const divToday = document.getElementById('current');
+        let condition = obj.forecast.condition;
+
+        let divContaner = el('div', 'forecasts',
+            el('span', 'condition symbol', wether[condition]),
+            el('span', 'condition',
+                el('span', 'forecast-data', obj.name),
+                el('span', 'forecast-data', `${obj.forecast.high}${wether.Degrees}/${obj.forecast.low}${wether.Degrees}`),
+                el('span', 'forecast-data', obj.forecast.condition),
+            ))
+        divToday.appendChild(divContaner);
     };
 
     function three(obj) {
-        console.log(obj)
+        let forecastInfo = document.getElementsByClassName('forecast-info');
+        if (forecastInfo.length !== 0) {
+            forecastInfo[0].remove()
+        }
+        const divTree = document.getElementById('upcoming');
+        const divForecastInfo = el('div', 'forecast-info', '');
+        for (let day of obj.forecast) {
+            let condition = day.condition;
+
+            let upcomingSpan = el('span', 'upcoming',
+                el('span', 'symbol', wether[condition]),
+                el('span', 'symbol', `${day.low}${wether.Degrees}/${day.high}${wether.Degrees}`),
+                el('span', 'symbol', day.condition),
+            );
+            divForecastInfo.appendChild(upcomingSpan);
+        }
+        divTree.appendChild(divForecastInfo);
+
+
     }
 
     async function errorChecker(main, period, code) {
@@ -55,12 +106,23 @@ function attachEvents() {
             const data = resp.json();
 
             return data;
-
-
         } catch (error) {
-            divForestCast.style.display = 'block';
-            divForestCast.textContent = `${error}`;
+            return error;
         }
+    };
+
+    function el(elm, atr, ...text) {
+        let elTag = document.createElement(elm);
+
+        elTag.classList = atr;
+
+        for (let word of text) {
+            if (typeof word == 'string' || typeof word == 'number') {
+                word = document.createTextNode(word);
+            }
+            elTag.appendChild(word);
+        }
+        return elTag;
     }
 
 
