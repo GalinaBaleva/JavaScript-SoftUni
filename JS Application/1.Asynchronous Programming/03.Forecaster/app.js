@@ -86,8 +86,6 @@ function attachEvents() {
             divForecastInfo.appendChild(upcomingSpan);
         }
         divTree.appendChild(divForecastInfo);
-
-
     }
 
     async function errorChecker(main, period, code) {
