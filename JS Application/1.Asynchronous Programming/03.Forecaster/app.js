@@ -15,6 +15,18 @@ function attachEvents() {
 
     async function getWather() {
         let divForestCast = document.getElementById('forecast');
+        const divToday = document.getElementById('current');
+        let divCurrent = divToday.querySelectorAll('div');
+        if (divCurrent[1] != undefined) {
+            divCurrent[1].remove();
+        }
+
+        const divTree = document.getElementById('upcoming');
+        let divUpcoming = divTree.querySelectorAll('div');
+        if (divUpcoming[1] != undefined) {
+            let toRemove = Array.from(divUpcoming).splice(1);
+            toRemove.forEach(el => el.remove())
+        }
         divForestCast.style.display = 'none';
 
         let location = document.getElementById('location');
@@ -36,18 +48,7 @@ function attachEvents() {
 
         } catch (error) {
             divForestCast.style.display = 'block';
-            const divToday = document.getElementById('current');
-            let divCurrent = divToday.querySelectorAll('div');
-            if (divCurrent[1] != undefined) {
-                divCurrent[1].remove();
-            }
 
-            const divTree = document.getElementById('upcoming');
-            let divUpcoming = divTree.querySelectorAll('div');
-            if (divUpcoming[1] != undefined) {
-                let toRemove = Array.from(divUpcoming).splice(1);
-                toRemove.forEach(el => el.remove())
-            }
             let divErrorToday = el('div', 'forecasts', error.message);
             divToday.appendChild(divErrorToday);
 
@@ -55,16 +56,9 @@ function attachEvents() {
             divTree.appendChild(divError);
             return;
         }
-
-
     }
-
-
+    
     function today(obj) {
-        let forecasts = document.getElementsByClassName('forecasts');
-        if (forecasts.length !== 0) {
-            forecasts[0].remove()
-        }
         const divToday = document.getElementById('current');
         let condition = obj.forecast.condition;
 
@@ -79,10 +73,6 @@ function attachEvents() {
     };
 
     function three(obj) {
-        let forecastInfo = document.getElementsByClassName('forecast-info');
-        if (forecastInfo.length !== 0) {
-            forecastInfo[0].remove()
-        }
         const divTree = document.getElementById('upcoming');
         const divForecastInfo = el('div', 'forecast-info', '');
         for (let day of obj.forecast) {
@@ -137,6 +127,4 @@ function attachEvents() {
     }
 
 }
-
-
 attachEvents();
