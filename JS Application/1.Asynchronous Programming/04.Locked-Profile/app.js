@@ -20,51 +20,104 @@ function createProfil(info) {
     imgPhoto.classList = 'userIcon';
     divProfile.appendChild(imgPhoto);
 
-    const lableLock = document.createElement('lable');
-    lableLock.textContent = 'Lock';
-    divProfile.appendChild(lableLock);
+    const labelLock = document.createElement('label');
+    labelLock.textContent = 'Lock';
+    divProfile.appendChild(labelLock);
 
     const inputRadioLock = document.createElement('input');
     inputRadioLock.setAttribute('type', 'radio');
-    inputRadioLock.setAttribute('name', `${info[0]}`);
+    inputRadioLock.setAttribute('name', `${info[1].username}Locked`);
     inputRadioLock.setAttribute('value', 'lock');
-    inputRadioLock.checked = true;
+    inputRadioLock.checked = 'checked';
     divProfile.appendChild(inputRadioLock);
 
-    const lableUnlock = document.createElement('lable');
-    lableUnlock.textContent = 'Unlock';
-    divProfile.appendChild(lableUnlock);
+    const labelUnlock = document.createElement('label');
+    labelUnlock.textContent = 'Unlock';
+    divProfile.appendChild(labelUnlock);
 
     const inputRadioUnlock = document.createElement('input');
     inputRadioUnlock.setAttribute('type', 'radio');
-    inputRadioUnlock.setAttribute('name', `${info[0]}`);
-    inputRadioUnlock.setAttribute('value', 'lock');
+    inputRadioUnlock.setAttribute('name', `${info[1].username}Locked`);
+    inputRadioUnlock.setAttribute('value', 'unlock');
     inputRadioUnlock.checked = false;
     divProfile.appendChild(inputRadioUnlock);
+
+    const br = document.createElement('br');
+    divProfile.appendChild(br);
 
     const hr = document.createElement('hr');
     divProfile.appendChild(hr);
 
-    const lableUserName = document.createElement('lable');
-    lableUserName.textContent = 'Username';
-    divProfile.appendChild(lableUserName);
+    const labelUserName = document.createElement('label');
+    labelUserName.textContent = 'Username';
+    divProfile.appendChild(labelUserName);
 
 
     const inputUsername = document.createElement('input');
     inputUsername.setAttribute('type', 'text');
-    inputUsername.setAttribute('name', `${info[0]}Username`);
+    inputUsername.setAttribute('name', `${info[1].username}Username`);
     inputUsername.setAttribute('value', `${info[1].username}`);
-    inputUsername.disabled = 'readonly';
+    inputUsername.disabled = true;
+    inputUsername.readOnly = true;
     divProfile.appendChild(inputUsername);
 
+    const divHidden = document.createElement('div');
+    divHidden.classList = 'hiddenInfo';
+    divHidden.setAttribute('id', `${info[1].username}HiddenFields`);
+    divProfile.appendChild(divHidden);
 
-    console.log(info)
+    const hrHidden = document.createElement('hr');
+    divHidden.appendChild(hrHidden);
+
+    const labelEmail = document.createElement('label');
+    labelEmail.textContent = 'Email:';
+    divHidden.appendChild(labelEmail);
+
+    const inputiHidden = document.createElement('input');
+    inputiHidden.setAttribute('type', 'email');
+    inputiHidden.setAttribute('name', `${info[1].username}Email`);
+    inputiHidden.value = `${info[1].email}`;
+    inputiHidden.disabled = true;
+    inputiHidden.readOnly = true;
+    divHidden.appendChild(inputiHidden);
+
+    const labelAge = document.createElement('label');
+    labelAge.textContent = 'Age:';
+    divHidden.appendChild(labelAge);
+
+    const inputAge = document.createElement('input');
+    inputAge.setAttribute('type', 'email');
+    inputAge.setAttribute('name', `${info[1].username}Age`);
+    inputAge.value = `${info[1].age}`;
+    inputAge.disabled = true;
+    inputAge.readOnly = true;
+    divHidden.appendChild(inputAge);
+
+    const buttonSchow = document.createElement('button');
+    buttonSchow.addEventListener('click',  function(){
+        schowMore(inputRadioLock, inputRadioUnlock, divHidden);
+    })
+    buttonSchow.textContent = 'Schow more';
+    divProfile.appendChild(buttonSchow);
+
+
     main.appendChild(divProfile);
-
 }
 
-function lockedUser(){
+function schowMore(inputRadioLock, inputRadioUnlock, divHidden){
 
+    if(inputRadioLock.checked == true){
+
+
+    } else if (inputRadioUnlock.checked == true){
+        if(divHidden.classList == 'hiddenInfo'){
+            divHidden.classList.remove('hiddenInfo');
+        } else {
+            divHidden.classList = 'hiddenInfo'
+        }
+
+        
+    }
 }
 
 

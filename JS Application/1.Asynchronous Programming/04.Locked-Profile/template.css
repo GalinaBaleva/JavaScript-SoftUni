@@ -78,6 +78,6 @@ button {
   width: 100%;
 }
 
-.hiddenInfo > input, .hiddenInfo > label {
+.hiddenInfo > label, .hiddenInfo > input  {
   display: none;
 }
