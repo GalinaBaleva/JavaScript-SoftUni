@@ -4,12 +4,20 @@ async function solution() {
     const respons = await fetch(urlList);
     const data = await respons.json();
 
-    console.log(data)
+    const divMain = document.getElementById('main');
+
+console.log(data)
+    data.forEach(element => {
+        const divAccordion = el('div', 'accordion', undefined, 
+        el('div', 'head', undefined, el('span', undefined, undefined, el.title),
+        el('button')),
+        )
+    });
 
 };
 
 function el(tagName, className, atr, ...text){
-    const tag = document.creatElement(tagName);
+    const tag = document.createElement(tagName);
 
     if(className != undefined){
         tag.classList = className;
@@ -19,7 +27,7 @@ function el(tagName, className, atr, ...text){
         tag.setAttribute(atr[0], atr[1]);
     };
 
-    if(text.length > 0){
+    if(text[0] != undefined){
         for(let word of text){
             word = document.createTextNode(word);
         };
