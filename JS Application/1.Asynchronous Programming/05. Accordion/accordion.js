@@ -1,37 +1,81 @@
 async function solution() {
     const urlList = `http://localhost:3030/jsonstore/advanced/articles/list`;
 
+
     const respons = await fetch(urlList);
+    if (respons.status != 200) {
+        throw new Error(`Error`);
+    }
     const data = await respons.json();
 
-    const divMain = document.getElementById('main');
-
-console.log(data)
     data.forEach(element => {
-        const divAccordion = el('div', 'accordion', undefined, 
-        el('div', 'head', undefined, el('span', undefined, undefined, el.title),
-        el('button')),
-        )
+        const url2 = `http://localhost:3030/jsonstore/advanced/articles/details/`;
+        const id = element._id;
+
+
+        fetch(url2 + id)
+            .then(respons => {
+                if (respons.status != 200) {
+                    throw new Error(`Error`);
+                };
+                return respons.json();
+            }).then(data => createDivAccordion(data))
+            .catch(error => {
+                throw new Error(error.message);
+            });
     });
-
 };
+function createDivAccordion(obj) {
+    const divMain = document.getElementById('main');
+    let button = el('button', 'button', ['id', obj._id], `Show more`);
 
-function el(tagName, className, atr, ...text){
+    let divAccordion = el('div', 'accordion', undefined,
+        el('div', 'head', undefined,
+            el('span', undefined, undefined, obj.title),
+            button
+        ),
+        el('div', 'extra', undefined,
+            el('p', undefined, undefined, obj.content))
+    );
+    divMain.appendChild(divAccordion);
+    button.addEventListener('click', onClick)
+}
+
+async function onClick(e) {
+    let button = e.target;
+    const parent = e.target.parentNode.parentNode;
+    const extraChild = parent.lastChild;
+
+    if (extraChild.classList == 'extra') {
+        extraChild.classList.remove('extra');
+        button.textContent = 'Less';
+    } else {
+        extraChild.classList = 'extra';
+        button.textContent = 'Show more';
+    }
+
+
+}
+
+function el(tagName, className, atr, ...text) {
     const tag = document.createElement(tagName);
 
-    if(className != undefined){
+    if (className != undefined) {
         tag.classList = className;
     };
 
-    if(atr != undefined){
+    if (atr != undefined) {
         tag.setAttribute(atr[0], atr[1]);
     };
 
-    if(text[0] != undefined){
-        for(let word of text){
-            word = document.createTextNode(word);
+    if (text[0] != undefined) {
+
+        for (let word of text) {
+            if (typeof word == 'string' || typeof word == 'number') {
+                word = document.createTextNode(word);
+            }
+            tag.appendChild(word);
         };
-        tag.appendChild(word);
     };
     return tag;
 
