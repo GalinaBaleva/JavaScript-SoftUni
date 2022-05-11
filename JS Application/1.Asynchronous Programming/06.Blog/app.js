@@ -1,6 +1,8 @@
 function attachEvents() {
     const btnLoad = document.getElementById('btnLoadPosts');
     btnLoad.addEventListener('click', loadingPosts);
+    const btnView = document.getElementById('btnViewPost');
+    btnView.addEventListener('click', viewList);
 };
 async function loadingPosts() {
     const url = `http://localhost:3030/jsonstore/blog/posts`;
@@ -12,9 +14,15 @@ async function loadingPosts() {
     
     const selectSection = document.getElementById('posts');
     Object.values(result).forEach(element => {
-        console.log(element.id)
+        const tagOption = document.createElement('option');
+        tagOption.setAttribute('value', `${element.id}`);
+        tagOption.textContent = element.title;
+        selectSection.appendChild(tagOption);
     });
 }
+function viewList(e){
+console.log()
+};
 
 function el(tagName, atr, ...text) {
     const tag = document.createElement(tagName);
@@ -30,6 +38,7 @@ function el(tagName, atr, ...text) {
             tag.appendChild(word);
         };
     };
+
     return tag;
 }
 attachEvents();
