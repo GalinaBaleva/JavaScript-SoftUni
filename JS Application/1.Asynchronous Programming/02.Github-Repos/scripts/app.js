@@ -3,14 +3,37 @@ function loadRepos(){
                let ulList = document.getElementById('repos');
                const url = `https://api.github.com/users/`;
 
-                              fetch(`${url}${userName.value}`)
+                              fetch(`${url}${userName.value}/repos`)
                               .then(resp => {
                                              if(resp.ok == false){
-                                                            throw new Error(`New Error!`)
-                                             }
-                              } );
+                                                            throw new Error(`Not Found`)
+                                             } 
+                                             return resp.json();
+                              })
+                              .then(handleResponse)
+                              .catch(handleError);
                
-               
+               function handleResponse(array){
+                              ulList.replaceChildren();
+                              for(let i = 0; i < array.length; i++){
+                                             const liElement = document.createElement('li');
+                                             const repo = document.createElement('a');
+                                             repo.setAttribute('href', array[i].html_url)
+                                             repo.textContent = array[i].full_name;
+                                             liElement.appendChild(repo);
+                                             ulList.appendChild(liElement);
+                              }
+
+
+               }
+
+               function handleError(error){
+                              ulList.replaceChildren();
+                              const liElement = document.createElement('li');
+                              liElement.textContent = error;
+                              ulList.appendChild(liElement);
+
+               }
 
 
 }
