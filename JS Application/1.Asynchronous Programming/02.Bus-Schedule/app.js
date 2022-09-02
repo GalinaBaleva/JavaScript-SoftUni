@@ -1,5 +1,5 @@
 function solve() {
-    let infoTable = document.getElementsByClassName('info');
+    let infoTable = document.getElementsByClassName('info')[0];
     const url = `http://localhost:3030/jsonstore/bus/schedule/`;
     const departBtn = document.getElementById('depart');
     const arriveBtn = document.getElementById('arrive');
@@ -7,30 +7,36 @@ function solve() {
     
     
     let nextStop = {
+        name: "",
         next: "depot"
     }
 
     async function depart() {
         departBtn.disabled = true;
         arriveBtn.disabled = false;
+        infoTable.textContent = `Loading...`
 
       try{
+
         const response = await fetch(url + nextStop.next);
 
         if(response.status != 200){
             throw new Error(`Error`);
         }
         const data = await response.json();
-
-        
+        infoTable.textContent = `Next stop ${data.name}`;
+        nextStop.name = data.name;
+        nextStop.next = data.next; 
       } catch (error){
         infoTable.textContent = error;
       }
     };
 
     async function arrive() {
-        departBtn.disabled = true;
-        arriveBtn.disabled = false;
+        departBtn.disabled = false;
+        arriveBtn.disabled = true;
+
+        infoTable.textContent = `Arriving at ${nextStop.name}`;
     };
 
     return {
@@ -39,10 +45,6 @@ function solve() {
     }
 }
 let result = solve();
-
-
-
-
 
 
 // function solve() {
