@@ -18,7 +18,7 @@ function attachEvents() {
         const divForcast = document.getElementById('forecast');
         divForcast.style.display = 'none';
         const inputLocation = document.getElementById('location');
-        
+
         const divCurrent = document.getElementById('current');
         let current = divCurrent.children[0];
         const divUpcoming = document.getElementById('upcoming');
@@ -27,15 +27,15 @@ function attachEvents() {
         if (divCurrent.children.length > 1) {
             divCurrent.children[1].remove();
             let toRemove = divUpcoming.children.splice(1);
-            toRemove.replaceChildren()
-        }
+            toRemove.replaceChildren();
+        };
 
         let response = await requests(url);
 
         if (response === undefined) {
             callError(current, divCurrent, upcoming, divUpcoming, divForcast);
             return;
-        }
+        };
 
         let responseFilter = response.filter(x => x.name == inputLocation.value);
         inputLocation.value = '';
@@ -47,8 +47,8 @@ function attachEvents() {
         } else {
             today(responseFilter[0].code, divCurrent, divForcast, current, upcoming);
             threeDays(responseFilter[0].code, divUpcoming, divForcast, upcoming);
-        }
-        
+        };
+
     }
 
     async function today(code, divCurrent, divForcast, current, upcoming) {
@@ -59,7 +59,7 @@ function attachEvents() {
         if (answerToday === undefined) {
             callError(current, divCurrent, upcoming, divUpcoming, divForcast);
             return;
-        }
+        };
 
         divForcast.style.display = 'block';
         current.textContent = `Current conditions`;
@@ -85,10 +85,15 @@ function attachEvents() {
         if (answerThreeDays === undefined) {
             callError(current, divCurrent, upcoming, divUpcoming, divForcast);
             return;
-        }
+        };
 
-        
-        console.log(answerThreeDays)
+        let divForestThreeDays = el('div', 'forecast-info', 
+        el('span', 'upcoming', 
+        el('span', 'symbol', conditions[answerThreeDays.forecast[0].condition])
+        el('span', 'forecast-data', answerThreeDays.forecast[0]))
+
+        )
+
     }
 
     async function requests(url) {
@@ -96,7 +101,7 @@ function attachEvents() {
             const answer = await fetch(url);
             if (answer.status != 200) {
                 throw new Error(`Error`);
-            }
+            };
             const data = await answer.json();
 
             return data;
