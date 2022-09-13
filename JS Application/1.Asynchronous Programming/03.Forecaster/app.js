@@ -26,8 +26,7 @@ function attachEvents() {
 
         if (divCurrent.children.length > 1) {
             divCurrent.children[1].remove();
-            let toRemove = divUpcoming.children.splice(1);
-            toRemove.replaceChildren();
+            divUpcoming.children[1].remove();
         };
 
         let response = await requests(url);
@@ -65,7 +64,7 @@ function attachEvents() {
         current.textContent = `Current conditions`;
         upcoming.textContent = `Three-day forecast`;
 
-        const temperature = `${conditions[answerToday.forecast.low]}${conditions.Degrees}/${conditions[answerToday.forecast.high]}${conditions.Degrees}`
+        const temperature = `${answerToday.forecast.low}${conditions.Degrees}/${answerToday.forecast.high}${conditions.Degrees}`;
 
         let spanForecases = el('div', 'forecasts',
             el('span', 'condition symbol', conditions[answerToday.forecast.condition]),
@@ -86,14 +85,17 @@ function attachEvents() {
             callError(current, divCurrent, upcoming, divUpcoming, divForcast);
             return;
         };
+        let divForestThreeDays = el('div', 'forecast-info', '');
+        divUpcoming.appendChild(divForestThreeDays)
 
-        let divForestThreeDays = el('div', 'forecast-info', 
-        el('span', 'upcoming', 
-        el('span', 'symbol', conditions[answerThreeDays.forecast[0].condition])
-        el('span', 'forecast-data', answerThreeDays.forecast[0]))
-
-        )
-
+        let spansUpcoming = answerThreeDays.forecast.forEach(element => {
+            const spanUpcoming = el('span', 'upcoming',
+                el('span', 'symbol', conditions[element.condition]),
+                el('span', 'forecast-data', `${element.low}${conditions.Degrees}/${element.high}${conditions.Degrees}`),
+                el('span', 'forecast-data', element.condition)
+                )
+                divForestThreeDays.appendChild(spanUpcoming);
+        });
     }
 
     async function requests(url) {
@@ -129,6 +131,8 @@ function attachEvents() {
         }
         return elTag;
     }
+
+    return;
 }
 
 
