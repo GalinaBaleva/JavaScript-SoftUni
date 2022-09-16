@@ -12,12 +12,19 @@ async function lockedProfile(){
         }
 
         const data = await answer.json();
+        console.log(data);
         
         Object.values(data).forEach(element => {
             const divProfile = el('div', 'profile', [],  
             el('img', 'usesrIcon', [['src', './iconProfile2.png']], ''),
-            el('label', '', [['value', 'Lock']], ''),
-            el('input', '', [['type', 'radio'], ['name', 'user1'], ['vaue', 'lock'], ['checked', true]], '')
+            el('label', '', [], 'Lock'),
+            el('input', '', [['type', 'radio'], ['name', element._id + 'Locked'], ['value', 'lock'], ['checked']], ''),
+            el('label', '', [], 'Unlock'),
+            el('input', '', [['type', 'radio'], ['name', element._id + 'Locked'], ['value', 'unlock']], ''),
+            el('br', '', [], ''),
+            el('hr', '', [], ''),
+            el('label', '', [], 'Username'),
+            el('input', '', [['type', 'text'], ['name', element._id + 'Username'], ['value', element.username], ['disabled', 'true'], ['readinly', 'true']], '')
             );
             main.appendChild(divProfile);
         });
@@ -40,7 +47,12 @@ function el(tagName, className, attributName, ...text){
 
     if(attributName.length !== 0){
         for(let atr of attributName){
-            tag.setAttribute(atr[0], atr[1]);
+            if(atr[1] !== undefined){
+                tag.setAttribute(atr[0], atr[1]);
+            } else {
+                tag.setAttribute(atr[0], true);
+            }
+
         }
     };
 
