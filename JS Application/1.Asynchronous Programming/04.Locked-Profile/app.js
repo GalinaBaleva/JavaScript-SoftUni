@@ -12,11 +12,10 @@ async function lockedProfile(){
         }
 
         const data = await answer.json();
-        console.log(data);
         
         Object.values(data).forEach(element => {
-            const divProfile = el('div', 'profile', [],  
-            el('img', 'usesrIcon', [['src', './iconProfile2.png']], ''),
+            let divProfile = el('div', 'profile', [],  
+            el('img', 'userIcon', [['src', './iconProfile2.png']], ''),
             el('label', '', [], 'Lock'),
             el('input', '', [['type', 'radio'], ['name', element._id + 'Locked'], ['value', 'lock'], ['checked']], ''),
             el('label', '', [], 'Unlock'),
@@ -24,22 +23,55 @@ async function lockedProfile(){
             el('br', '', [], ''),
             el('hr', '', [], ''),
             el('label', '', [], 'Username'),
-            el('input', '', [['type', 'text'], ['name', element._id + 'Username'], ['value', element.username], ['disabled', 'true'], ['readinly', 'true']], '')
+            el('input', '', [['type', 'text'], ['name', element._id + 'Username'], ['value', element.username], ['disabled', 'true'], ['readonly', 'true']], ''),
+            el('div', 'hiddenInfo', [], 
+            el('hr', '', [], ''),
+            el('label', '', [], 'Email:'),
+            el('input', '', [['type', 'email'], ['name', element._id + 'Email'], ['value', element.email], ['disabled'], ['readonly']], ''),
+            el('label', '', [], 'Age:'),
+            el('input', '', [['type', 'emai'], ['name', element._id + 'Age'], ['value', element.age], ['disabled'], ['readonly']])
+            ),
+            el('button', '', [], 'Show more')
             );
             main.appendChild(divProfile);
         });
-        
-        
-
-
+        showMore();
     } catch(error){
         const div = el('div', '', '', error.status);
         main.appendChild(div);
     }
 }
 
+function showMore(){
+    let buttons = document.getElementsByTagName('button');
+    Array.from(buttons).forEach(el => el.addEventListener('click', onClick));
+}
+    
+function onClick(e){
+    const parent = e.target.parentNode;
+    let divHiddenInfo = '';
+    let condition = '';
+    Array.from(parent.childNodes).filter(el => {
+        if(el.tagName === 'DIV'){
+            divHiddenInfo = el;
+        } else if(el.tagName === 'INPUT' && el.checked === true){
+            condition = el.value;
+        }
+    });
+
+    if(condition === 'unlock'){
+        if(divHiddenInfo.classList.value === 'hiddenInfo'){
+            divHiddenInfo.classList.remove('hiddenInfo');
+            e.target.textContent = 'Show Less';
+        } else {
+            divHiddenInfo.classList.add('hiddenInfo');
+            e.target.textContent = 'Show More';
+        }
+    } 
+}
+
 function el(tagName, className, attributName, ...text){
-    const tag = document.createElement(tagName);
+    let tag = document.createElement(tagName);
 
     if(className !== ''){
         tag.classList.add(className);
@@ -65,12 +97,6 @@ function el(tagName, className, attributName, ...text){
 
     return tag;
 }
-
-
-
-
-
-
 
 
 
@@ -195,54 +221,3 @@ function el(tagName, className, attributName, ...text){
         
 //     }
 // }
-
-
-/*function createProfil(info) {
-    const main = document.getElementById('main');
-    const divProfile = el('div', undefined, 'profile',
-        el('img', { 'src': './iconProfile2.png' }, 'userIcon', undefined),
-        el('lable', undefined, undefined, 'Lock'),
-        el('input', { 'type': 'radio', 'name': 'user1Locked', 'value': 'lock', '': 'checked' }, undefined, undefined),
-        el('br', undefined, undefined, undefined),
-        el('lable', undefined, undefined, 'Unlock'),
-        el('input', { 'type': 'radio', name: 'user1Locked', 'value': 'unlock' }, undefined, undefined),
-        el('hr', undefined, undefined, undefined),
-        el('lable', undefined, undefined, 'Username'),
-        el('input', { type: 'text', name: 'user1Username', 'value': `${info[1].name}`, '': 'disabled readonly' }),
-        el('div', undefined, 'hiddenInfo',
-            el('hr', undefined, undefined, undefined),
-            el('lable', undefined, undefined, 'Email:'),
-            el('input', { type: 'email', name: 'user1Email', 'value': `${info[1].email}`, '': 'disable readonly' }),
-            el('lable', undefined, undefined, 'Age'),
-            el('input', { type: 'email', name: 'user1Age', 'value': `${info[1].age}`, '': 'disable readonly' }, undefined),
-        ),
-        el('button', undefined, undefined, `Show more`)
-    );
-    console.log(divProfile)
-    main.appendChild(divProfile);
-
-}
-function el(tagName, atr, classType, ...text) {
-    let tag = document.createElement(tagName);
-
-    if (classType != undefined) {
-        tag.classList = classType;
-    }
-
-    if (atr != undefined) {
-        for (let attribut of Object.keys(atr)) {
-            tag[attribut] = atr[attribut];
-        };
-    }
-
-    if (text[0] != undefined) {
-        for (let word of text) {
-            if (typeof word == 'string' || typeof word === 'number') {
-                word = document.createTextNode(word);
-            };
-            tag.appendChild(word);
-        };
-    }
-    return tag;
-
-}*/
