@@ -18,7 +18,7 @@ async function solution() {
         let divAccordion = el('div', 'accordion', [],
             el('div', 'head', [],
                 el('span', '', [], element.title),
-                el('button', 'button', [['id', element._id]], 'More')
+                el('button', 'button', ['id', element._id], 'More')
             ),
             el('div', 'extra', [],
                 el('p', '', [], dataFromId.content)
@@ -69,13 +69,7 @@ function el(tagName, className, attrName, ...text) {
     };
 
     if (attrName.length != 0) {
-        for (let attr of attrName) {
-            if (attr[1] != undefined) {
-                tag.setAttribute(attr[0], attr[1]);
-            } else {
-                tag.setAttribute(attr[0], true);
-            };
-        };
+        tag.setAttribute(attr[0], attr[1]);
     };
 
     for (let word of text) {
