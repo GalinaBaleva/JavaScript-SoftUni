@@ -14,9 +14,16 @@ function createRecipes(recipes, mainTag) {
                                              el('div', 'small', [],
                                                             el('img', '', ['src', recepe.img], ''))
                               );
+                              articleTag.addEventListener('click', () => {
+                                             onClick(recepe._id);
+                              })
                               mainTag.appendChild(articleTag);
-               })
+               });
+};
 
+async function onClick(e) {
+               const answerById = getAnswer(`http://localhost:3030/jsonstore/cookbook/details/` + e);
+               console.log(answerById)
 }
 
 
