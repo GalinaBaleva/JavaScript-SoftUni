@@ -1,57 +1,55 @@
-async function getRecipes() {
-               const response = await fetch(`http://localhost:3030/jsonstore/cookbook/recipes`);
-               const data = await response.json();
-
-               return data;
-
-
-};
-window.addEventListener('load', async () => {
-               const mainTag = document.getElementsByTagName('main')[0];
-               const data = await getRecipes()
-               Object.values(data).forEach(element => {
-                              const imgTag = document.createElement('img');
-                              imgTag.setAttribute('src', element.img)
-                              const articleTag = el('article', 'preview',
-                                             el('div', 'title', el('h2', undefined, element.name)),
-                                             el('div', 'small', imgTag));
-                              
-                              mainTag.firstChild.remove();
-                              mainTag.appendChild(articleTag);
-                              articleTag.addEventListener('click', async () => {
-                                             let promise = getByID(element._id);
-                                             addingIngredients(articleTag, promise, mainTag);         
-                              });
-               });
+window.addEventListener('DOMContentLoaded', async () => {
+               const recipes = await getAnswer(`http://localhost:3030/jsonstore/cookbook/recipes`);
+               const main = document.getElementsByTagName('main')[0];
+               console.log(recipes)
+               createRecipes(recipes, main);
 });
-async function addingIngredients(articleTag, promise, mainTag){
-               console.log(articleTag, promise, mainTag)
+
+function createRecipes(recipes, mainTag) {
+               mainTag.replaceChildren();
+               Object.values(recipes).forEach(recepe => {
+                              const articleTag = el('article', 'preview', ['id', recepe._id],
+                                             el('div', 'title', [],
+                                                            el('h2', '', [], recepe.name)),
+                                             el('div', 'small', [],
+                                                            el('img', '', ['src', recepe.img], ''))
+                              );
+                              mainTag.appendChild(articleTag);
+               })
 
 }
-async function getByID(id) {
-               const url = `http://localhost:3030/jsonstore/cookbook/details/`;
-               const response = await fetch(url + id);
-               const data = response.json();
 
-               return data;
-               
+
+async function getAnswer(url) {
+               try {
+                              const answer = await fetch(url);
+
+                              if (answer.status != 200) {
+                                             throw new Error(`Error`);
+                              };
+
+                              const data = await answer.json();
+
+                              return data;
+               } catch (error) {
+                              return error.message;
+               }
 };
 
+function el(tagName, className, attrArray, ...text) {
+               let tag = document.createElement(tagName);
 
-function el(type, className, ...content) {
-               const tag = document.createElement(type);
-
-               if (className != undefined) {
-                              tag.classList = className;
+               if (className != '') {
+                              tag.classList.add(className);
                };
-
-               if (content[0] != undefined) {
-                              for (let word of content) {
-                                             if (typeof word == 'string' || typeof word == 'number') {
-                                                            word = document.createTextNode(word);
-                                             };
-                                             tag.appendChild(word);
+               if (attrArray.length != 0) {
+                              tag.setAttribute(attrArray[0], attrArray[1]);
+               };
+               for (let word of text) {
+                              if (typeof (word) == 'string' || typeof (word) == 'number') {
+                                             word = document.createTextNode(word);
                               };
+                              tag.appendChild(word);
                };
                return tag;
 }
