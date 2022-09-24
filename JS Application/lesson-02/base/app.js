@@ -1,7 +1,6 @@
 window.addEventListener('DOMContentLoaded', async () => {
                const recipes = await getAnswer(`http://localhost:3030/jsonstore/cookbook/recipes`);
                const main = document.getElementsByTagName('main')[0];
-               console.log(recipes)
                createRecipes(recipes, main);
 });
 
@@ -15,15 +14,32 @@ function createRecipes(recipes, mainTag) {
                                                             el('img', '', ['src', recepe.img], ''))
                               );
                               articleTag.addEventListener('click', () => {
-                                             onClick(recepe._id);
+                                             onClick(recepe._id, articleTag);
                               })
                               mainTag.appendChild(articleTag);
                });
 };
 
-async function onClick(e) {
-               const answerById = getAnswer(`http://localhost:3030/jsonstore/cookbook/details/` + e);
-               console.log(answerById)
+async function onClick(e, articleTag) {
+               const answerById = await getAnswer(`http://localhost:3030/jsonstore/cookbook/details/` + e);
+               console.log(answerById, articleTag)
+
+               const liTags = [];
+               answerById.steps.forEach(element => {
+                             liTags.push(el('li', '', [], element));
+                             
+               })
+               console.log(liTags)
+
+               const openArticle = el('atricle', '', [],
+                              el('h2', '', [], answerById.name),
+                              el('div', 'band', [],
+                                             el('div', 'thumb', [],
+                                                            el('img', '', ['src', answerById.img], '')),
+                                             el('div', 'ingredients', [],
+                                                            el('h3', '', [], 'Ingredients'),
+                                                            el('ul', '', [], liTags))))
+                                                                           
 }
 
 
