@@ -13,15 +13,18 @@ function createRecipes(recipes, mainTag) {
                                              el('div', 'small', [],
                                                             el('img', '', ['src', recepe.img], ''))
                               );
+
                               articleTag.addEventListener('click', () => {
-                                             onClick(recepe._id, articleTag);
+                                             onClick(recepe._id, articleTag, articleTag.getElementsByTagName('h2')[0]);
                               })
                               mainTag.appendChild(articleTag);
                });
 };
 
-async function onClick(e, articleTag) {
-               const answerById = await getAnswer(`http://localhost:3030/jsonstore/cookbook/details/` + e);
+async function onClick(id, articleTag, title) {
+               title.textContent = `Loading...`
+               const answerById = await getAnswer(`http://localhost:3030/jsonstore/cookbook/details/` + id);
+
 
                const openArticle = el('article', '', [],
                               el('h2', '', [], answerById.name),
