@@ -7,7 +7,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 function createRecipes(recipes, mainTag) {
                mainTag.replaceChildren();
                Object.values(recipes).forEach(recepe => {
-                              const articleTag = el('article', 'preview', ['id', recepe._id],
+                              const articleTag = el('article', 'preview', [],
                                              el('div', 'title', [],
                                                             el('h2', '', [], recepe.name)),
                                              el('div', 'small', [],
@@ -22,26 +22,23 @@ function createRecipes(recipes, mainTag) {
 
 async function onClick(e, articleTag) {
                const answerById = await getAnswer(`http://localhost:3030/jsonstore/cookbook/details/` + e);
-               console.log(answerById, articleTag)
 
-               const liTags = [];
-               answerById.steps.forEach(element => {
-                             liTags.push(el('li', '', [], element));
-                             
-               })
-               console.log(liTags)
-
-               const openArticle = el('atricle', '', [],
+               const openArticle = el('article', '', [],
                               el('h2', '', [], answerById.name),
                               el('div', 'band', [],
                                              el('div', 'thumb', [],
                                                             el('img', '', ['src', answerById.img], '')),
                                              el('div', 'ingredients', [],
                                                             el('h3', '', [], 'Ingredients'),
-                                                            el('ul', '', [], liTags))))
-                                                                           
-}
+                                                            el('ul', '', [], answerById.ingredients.map(e => el('li', '', [], e))))),
+                              el('div', 'description', [],
+                                             el('h3', '', [], 'Preparation:'),
+                                             answerById.steps.map(element => el('p', '', [], element))));
 
+               
+               articleTag.replaceWith(openArticle)
+
+};
 
 async function getAnswer(url) {
                try {
@@ -68,6 +65,9 @@ function el(tagName, className, attrArray, ...text) {
                if (attrArray.length != 0) {
                               tag.setAttribute(attrArray[0], attrArray[1]);
                };
+               text = text.reduce((a, c) => a.concat(Array.isArray(c) ? c : [c]), []);
+
+
                for (let word of text) {
                               if (typeof (word) == 'string' || typeof (word) == 'number') {
                                              word = document.createTextNode(word);
@@ -75,5 +75,5 @@ function el(tagName, className, attrArray, ...text) {
                               tag.appendChild(word);
                };
                return tag;
-}
+};
 
