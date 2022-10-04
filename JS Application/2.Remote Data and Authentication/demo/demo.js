@@ -1,17 +1,28 @@
 window.addEventListener('DOMContentLoaded', event => {
                const form = document.querySelector('form');
-               form.addEventListener('submit', event => {
-                              event.preventDefault();
-
-                              const person = document.querySelector('[name = "person"]').value;
-                              const phone = document.querySelector('[name = "phone"]').value;
-
-                              const record = { person, phone };
-
-                              postData(record);
-               });
+               form.addEventListener('submit', onSubmit);
 });
-               
+
+const person = document.querySelector('[name = "person"]');
+const phone = document.querySelector('[name = "phone"]');
+
+       
+async function onSubmit(event){
+               event.preventDefault();
+               const data = new FormData(event.target);
+
+               const person = data.get('person').trim();
+               const phone = data.get('phone').trim();
+
+               const record = { person, phone };
+
+               const result = await postData(record);
+
+               event.target.reset();
+               alert('Record created');
+
+
+};
 
 
 async function getDataById() {
@@ -21,7 +32,7 @@ async function getDataById() {
                const result = await res.json();
 
                return result;
-}
+};
 
 async function getDataById(id) {
                const url = `http://localhost:3030/jsonstore/phonebook` + id;
@@ -30,7 +41,7 @@ async function getDataById(id) {
                const result = await res.json();
 
                return result;
-}
+};
 async function postData(data) {
                const url = `http://localhost:3030/jsonstore/phonebook`;
 
@@ -74,4 +85,4 @@ async function deleteData(id) {
                const result = await res.json();
 
                return result;
-}
+};
