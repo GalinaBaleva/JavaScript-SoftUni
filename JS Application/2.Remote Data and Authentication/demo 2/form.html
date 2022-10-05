@@ -9,23 +9,74 @@
 </head>
 
 <body>
+               <h2 id="register-form">Register</h2>
                <form>
-                              <label>Email:<input type="text" name="email"></label>
-                              <label>Password:<input type="password" name="password"></label>
-                              <label>Repeat:<input type="password" name="repass"></label>
+                              <label>Email:<input type="text" name="email"></label><br>
+                              <label>Password:<input type="password" name="password"></label><br>
+                              <label>Repeat:<input type="password" name="repass"></label><br>
+                              <input type="submit" value="Register">
+               </form>
+
+               <h2 id="login-form">Login</h2>
+               <form>
+                              <label>Email:<input type="text" name="email"></label><br>
+                              <label>Password:<input type="password" name="password"></label><br>
                               <input type="submit" value="Register">
                </form>
 
                <script>
-                              const form = document.querySelector('form');
-                              form.addEventListener('submit', onRegister);
+                              const registerForm = document.getElementById('register-form');
+                              registerForm.addEventListener('submit', onRegister);
 
-                              async function onRegister(event){
+                              async function onRegister(event) {
+                                             const url = 'http://localhost:3030/users/login';
                                              event.preventDefault();
-                                             const formData = new FormData(form);
+                                             const formData = new FormData(registerForm);
 
-                                             console.log([...formData.entries()])
-                              }
+                                             const email = formData.get('email').trim();
+                                             const password = formData.get('password').trim();
+                                             const repass = formData.get('repass').trim();
+
+                                             const res = await fetch(url, {
+                                                            method: 'post',
+                                                            headers: {
+                                                                           'Content-Type': 'application/json'
+                                                            },
+                                                            body: JSON.stringify({ email, password })
+                                             });
+                                             const result = await res.json();
+
+                                             const token = result.accessToken;
+                                             sessionStorage.setItem('token',)
+
+                                             window.location = 'index.html';
+                              };
+
+                              const loginForm = document.getElementById('login-form');
+                              loginForm.addEventListener('submit', onLogin);
+
+                              async function onLogin(event) {
+                                             const url = 'http://localhost:3030/users/register';
+                                             event.preventDefault();
+                                             const formData = new FormData(loginForm);
+
+                                             const email = formData.get('email').trim();
+                                             const password = formData.get('password').trim();
+
+
+                                             const res = await fetch(url, {
+                                                            method: 'post',
+                                                            headers: {
+                                                                           'Content-Type': 'application/json'
+                                                            },
+                                                            body: JSON.stringify({ email, password })
+                                             });
+                                             const result = await res.json();
+
+                                             const token = result.accessToken;
+                                             sessionStorage.setItem('token',);
+                                             window.location = 'index.html';
+                              };
                </script>
 </body>
 

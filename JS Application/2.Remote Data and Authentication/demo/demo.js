@@ -20,15 +20,19 @@ async function onSubmit(event){
 
                event.target.reset();
                alert('Record created');
-
-
 };
 
-
-async function getDataById() {
+async function getData() {
                const url = `http://localhost:3030/jsonstore/phonebook`;
 
-               const res = await fetch(url);
+               const options = { headers: {} };
+
+               const token = sessionStorage(getItem('token'));
+               if(token !== null){
+                              options.headers['X-Authorization'] = token;
+               };
+
+               const res = await fetch(url, options);
                const result = await res.json();
 
                return result;
