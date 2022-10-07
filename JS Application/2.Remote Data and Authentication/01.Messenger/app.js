@@ -5,17 +5,7 @@ const url = `http://localhost:3030/jsonstore/messenger`;
 
 async function attachEvents() {
     areaForMessages.value = '';
-
-    const retrievedMessages = await retrievingMessages();
-    
-    if (retrievedMessages == 'Error') {
-        areaForMessages.value = `Error`;
-        
-        return;
-    };
-    
-    const messages = Object.values(retrievedMessages).map(mes => `${mes.author}: ${mes.content}`);
-    areaForMessages.value = messages.join('\n');
+    onRefresh()
 
     const submitBtn = document.getElementById('submit');
     submitBtn.addEventListener('click', onSubmit);
@@ -39,13 +29,12 @@ async function onSubmit(){
         headers: {
             'Content-Type': 'application/json'
         },
-        body: json.stringify({name: mess})
+        body: JSON.stringify({author: name, content: mess})
     };
 
     const res = await fetch(url, options);
     const respons = await res.json();
 
-    console.log(respons)
 
     authorsName.value = '';
     message.value = '';
@@ -69,8 +58,19 @@ async function retrievingMessages() {
     };
 };
 
-async function onRefresh(nameOfAuthor, messageOfAuthor){
+async function onRefresh(){
+    areaForMessages.value = '';
 
+    const retrievedMessages = await retrievingMessages();
+    
+    if (retrievedMessages == 'Error') {
+        areaForMessages.value = `Error`;
+        
+        return;
+    };
+    
+    const messages = Object.values(retrievedMessages).map(mes => `${mes.author}: ${mes.content}`);
+    areaForMessages.value = messages.join('\n');
 }
 
 
