@@ -67,7 +67,7 @@ async function updateData(id, data) {
                const url = `http://localhost:3030/jsonstore/phonebook` + id;
 
                const options = {
-                              metod: 'put',
+                              method: 'put',
                               headers: {
                                              'Content-Type': 'application/json'
                               },
@@ -83,7 +83,7 @@ async function deleteData(id) {
                const url = `http://localhost:3030/jsonstore/phonebook` + id;
 
                const options = {
-                              metod: 'delete'
+                              method: 'delete'
                };
                const res = await fetch(url, options);
                const result = await res.json();
