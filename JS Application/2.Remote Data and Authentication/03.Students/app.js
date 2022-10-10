@@ -9,8 +9,8 @@ window.addEventListener('DOMContentLoaded', async () => {
                Object.values(answer).forEach(element => creatingTr(element));
 
                const btn = document.getElementById('submit');
-               btn.addEventListener('click', async () => {
-                              createNewStudent()
+               btn.addEventListener('click', async (event) => {
+                              createNewStudent(event)
                });
 });
 const url = `http://localhost:3030/jsonstore/collections/students`;
@@ -43,15 +43,35 @@ function creatingTr(element) {
                tBody.appendChild(trElement);
 };
 
-async function createNewStudent() {
+async function createNewStudent(event) {
+               event.preventDefault()
                let isTrue = inputs.some(c => c.value == '');
 
                if (isTrue == true) {
-                              inputs.map(i => i.vlaue = '');
-               }
-               //create new student
-               //push 
-}
+                              inputs.forEach(i => { i.value = '' });
+
+                              return;
+               };
+
+               const options = {
+                              method: 'post',
+                              headers: {
+                                             'Content-Type': 'application/json'
+                              },
+                              body: JSON.stringify({
+                                             firstName: inputs[0].value,
+                                             lastName: inputs[1].value,
+                                             facultyNumber: inputs[2].value,
+                                             grade: inputs[3].value
+                              })
+               };
+               try {
+                              const res = await fetch(url, options);
+                              inputs.forEach(i => { i.value = '' });
+               } catch (error) {
+                              return;
+               };
+};
 
 function el(tagName, ...text) {
                let tag = document.createElement(tagName);
