@@ -1,6 +1,13 @@
 const tBody = document.getElementsByTagName('tbody')[0];
+tBody.replaceChildren()
 
-window.addEventListener('DOMContentLoaded', async () => {
+const btn = document.getElementById('submit');
+btn.addEventListener('click', async (event) => {
+               createNewStudent(event)
+});
+
+async function firstLoading () {
+               tBody.replaceChildren()
                const answer = await loadingContent();
                if (answer === `Error`) {
                               return;
@@ -8,15 +15,9 @@ window.addEventListener('DOMContentLoaded', async () => {
 
                Object.values(answer).forEach(element => creatingTr(element));
 
-               const btn = document.getElementById('submit');
-               btn.addEventListener('click', async (event) => {
-                              createNewStudent(event)
-               });
-});
+};
 const url = `http://localhost:3030/jsonstore/collections/students`;
 const inputs = Array.from(document.getElementsByClassName('inputs')[0].children);
-
-
 
 async function loadingContent() {
                try {
@@ -68,6 +69,8 @@ async function createNewStudent(event) {
                try {
                               const res = await fetch(url, options);
                               inputs.forEach(i => { i.value = '' });
+                              firstLoading()
+                              
                } catch (error) {
                               return;
                };
@@ -84,3 +87,5 @@ function el(tagName, ...text) {
                };
                return tag;
 };
+
+firstLoading();
