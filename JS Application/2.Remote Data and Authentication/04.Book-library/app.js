@@ -4,6 +4,15 @@ const tBody = document.getElementsByTagName('tbody')[0];
 const loadBtn = document.getElementById('loadBooks');
 loadBtn.addEventListener('click', async () => loadingContent());
 
+const editForm = document.getElementsByClassName('edit-form')[0];
+let [title, author] = editForm.querySelectorAll('input');
+title.value = '';
+author.value = ''
+
+const createForm = document.getElementsByClassName('form')[0];
+createForm.addEventListener('submit', createRow);
+
+
 loadingContent();
 
 async function loadingContent() {
@@ -31,39 +40,66 @@ async function loadingContent() {
 };
 
 async function onEdit(event) {
+               event.preventDefault();
+               title.value = '';
+               author.value = '';
+
+               createForm.style.display = 'none';
+               editForm.style.display = 'block';
                const parentWithId = event.target.parentElement;
                const id = parentWithId.dataset.id;
 
-               const parent = parentWithId.parentElement;
-               
                const answer = await requests(id);
 
-               //taking info from inputs
-               //making post request
-               //clear inputs
-               
+               title.value = answer.title;
+               author.value = answer.author;
 
-               // const editBtn = el('button', [], 'Edit');
-               // editBtn.addEventListener('click', onEdit);
+               editForm.addEventListener('submit', async (event) => onEditSubmit(id, title, author, event));
+};
 
-               // const deleteBtn = el('button', [], 'Delete');
-               // deleteBtn.addEventListener('click', onDelete)
+async function onEditSubmit(id, title, author, event) {
+               event.preventDefault();
+               const options = {
+                              method: 'put',
+                              headers: {
+                                             'Content-Type': 'applications/json'
+                              },
+                              body: JSON.stringify({ title: title.value, author: author.value })
+               };
 
-               // const tr = el('tr', [],
-               //                el('td', [], answer.title),
-               //                el('td', [], answer.author),
-               //                el('td', ['data-id', id],
-               //                               editBtn,
-               //                               deleteBtn
-               //                )
-               // );
+               const result = await requests(id, options);
+               loadingContent();
+               title.value = '';
+               author.value = '';
 
-               // parent.repalceWith(tr);
-
-
-               
+               createForm.style.display = 'block';
+               editForm.style.display = 'none';
 
 };
+
+async function createRow(event) {
+               event.preventDefault();
+
+               const data = new FormData(createForm);
+               const titleToCreate = data.get('title');
+               const authorToCreate = data.get('author');
+
+               if (titleToCreate == '' || authorToCreate == '') {
+                              return;
+               };
+
+               const options = {
+                              method: 'post',
+                              headers: {
+                                             'Content-Type': 'applications/json'
+                              },
+                              body: JSON.stringify({ title: titleToCreate, author: titleToCreate })
+               };
+
+               const res = await requests(undefined, options);
+               createForm.reset();
+               loadingContent()
+}
 
 async function onDelete(event) {
                const parent = event.target.parentElement;
@@ -73,8 +109,8 @@ async function onDelete(event) {
                                              'Content-Type': 'applications/json'
                               }
                };
-              const answer = await requests (parent.dataset.id, options);
-              loadingContent();
+               const answer = await requests(parent.dataset.id, options);
+               loadingContent();
 };
 
 async function requests(id, options) {
