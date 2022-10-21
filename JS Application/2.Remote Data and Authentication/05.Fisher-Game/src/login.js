@@ -27,9 +27,9 @@ async function onLogin(event) {
 
                               const data = await res.json();
                               const userData = {
-                                             email: data.email,
-                                             id: data._id,
-                                             taken: data.accessTocen
+                                             'email': data.email,
+                                             'id': data._id,
+                                             'token': data.accessToken
                               };
 
                               sessionStorage.setItem('userData', JSON.stringify(userData));
