@@ -9,10 +9,11 @@ window.addEventListener('DOMContentLoaded', () => {
                               document.getElementById('user').style.display = 'none';
                };
                document.querySelector('.load').addEventListener('click', loadData);
+
+               document.querySelector('#addForm').addEventListener('submit', onSubmit);
 });
 
 async function loadData(event) {
-               event.preventDefault();
                const catches = document.querySelector('#catches');
                catches.replaceChildren();
 
@@ -24,7 +25,44 @@ async function loadData(event) {
                });
 };
 
-function createAngler(el){
+async function onSubmit(event) {
+               event.preventDefault();
+
+               if (!userData) {
+                              window.location = '/login.html';
+                              return;
+               };
+
+               const formData = new FormData(event.target);
+               const data = [...formData.entries()].reduce((a, [key, value]) => Object.assign(a, { [key]: value }), {});
+
+               try {
+                              if (Object.values(data).some(x => x == '')) {
+                                             throw new Error('All fields are required!');
+                              };
+
+                              const res = await fetch(`http://localhost:3030/data/catches/`, {
+                                             method: 'post', 
+                                             headers: {
+                                                            'Content-Type': 'applications/json',
+                                                            'X-Authorization': userData.token
+                                             },
+                                             body: JSON.stringify(data)
+                              });
+                              if(res.ok != true){
+                                             const error = await res.json();
+                                             throw new Error(error.message);
+                              };
+                              event.target.reset()
+                              loadData();
+
+               } catch (error) {
+                              alert(error.message);
+               }
+
+}
+
+function createAngler(el) {
                const isUser = userData && userData.id == el._ownerId ? [] : ['disabled', true];
                const updateBtn = e('button', 'update', [['data_id', el._ownerId], isUser], 'Update');
                updateBtn.addEventListener('click', onUpdate)
@@ -67,7 +105,7 @@ function e(tagName, className, attrNames, ...text) {
 
                if (attrNames.length > 0) {
                               for (let att of attrNames) {
-                                             if(att[0] != undefined){
+                                             if (att[0] != undefined) {
                                                             tag.setAttribute(att[0], att[1]);
                                              }
                               };
@@ -81,6 +119,7 @@ function e(tagName, className, attrNames, ...text) {
                };
                return tag;
 };
+//welcome, chenge the name
 
 
 
