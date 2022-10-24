@@ -36,6 +36,7 @@ async function onSubmit(event) {
 
                const formData = new FormData(event.target);
                const data = [...formData.entries()].reduce((a, [key, value]) => Object.assign(a, { [key]: value }), {});
+               console.log(data)
 
                try {
                               if (Object.values(data).some(x => x == '')) {
@@ -93,25 +94,37 @@ function createAngler(el) {
 
 async function onUpdate(event) {
                const id = event.target.dataset.id;
-               const formData = event.target.parentElement.children;
+               const formData = event.target.parentElement;
+               const inputs = formData.querySelectorAll('input');
+               let obj = {};
+               const data = [...inputs].forEach(element => {
+                              Object.assign(obj, {[element.className]:element.value});
+               });
+               console.log(obj)
                
+               try{
+                              if([...Object.values(obj)].some(x => x === '')){
+                                             throw new Error('All fields are required!')
+                              }
+                              const res = await fetch(`http://localhost:3030/data/catches/${id}`, {
+                                             method: 'put',
+                                             headers: {
+                                                            'Content-Type': 'applications/json',
+                                                            'X-Authorization': userData.token
+                                             },
+                                             body: obj
+                              });
 
-               const body = formData.map((label, input) => Object.assign({[label.textContent]:input.value}), {})
-               console.log(body)
+                              // if()
+                              const data = res.json();
+                              console.log(data)
+               } catch (error){
+                              alert(error.message);
+               }
 
 
 
 
-               // const res = await fetch(`http://localhost:3030/data/catches/${id}`, {
-               //                method: 'put',
-               //                headers: {
-               //                               'Content-Type': 'applications/json',
-               //                               'X-Authorization': userData.token
-               //                },
-               //                body: {}
-               // });
-               // const data = res.json();
-               // console.log(data)
 
                
 };
