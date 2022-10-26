@@ -44,14 +44,14 @@ async function onSubmit(event) {
                               };
 
                               const res = await fetch(`http://localhost:3030/data/catches/`, {
-                                             method: 'post', 
+                                             method: 'post',
                                              headers: {
-                                                            'Content-Type': 'applications/json',
+                                                            'Content-Type': 'application/json',
                                                             'X-Authorization': userData.token
                                              },
                                              body: JSON.stringify(data)
                               });
-                              if(res.ok != true){
+                              if (res.ok != true) {
                                              const error = await res.json();
                                              throw new Error(error.message);
                               };
@@ -60,9 +60,9 @@ async function onSubmit(event) {
 
                } catch (error) {
                               alert(error.message);
-               }
+               };
 
-}
+};
 
 function createAngler(el) {
                const isUser = userData && userData.id == el._ownerId ? [] : ['disabled', true];
@@ -98,35 +98,30 @@ async function onUpdate(event) {
                const inputs = formData.querySelectorAll('input');
                let obj = {};
                const data = [...inputs].forEach(element => {
-                              Object.assign(obj, {[element.className]:element.value});
+                              Object.assign(obj, { [element.className]: element.value });
                });
-               console.log(obj)
-               
-               try{
-                              if([...Object.values(obj)].some(x => x === '')){
+
+               try {
+                              if ([...Object.values(obj)].some(x => x === '')) {
                                              throw new Error('All fields are required!')
                               }
                               const res = await fetch(`http://localhost:3030/data/catches/${id}`, {
-                                             method: 'put',
+                                             method: `put`,
                                              headers: {
-                                                            'Content-Type': 'applications/json',
-                                                            'X-Authorization': userData.token
+                                                            "Content-Type": `application/json`,
+                                                            "X-Authorization": userData.token
                                              },
-                                             body: obj
+                                             body: JSON.stringify(obj)
                               });
 
-                              // if()
-                              const data = res.json();
-                              console.log(data)
-               } catch (error){
+                              if (res.ok != ok) {
+                                             const error = res.json();
+                                             throw new Error(error.message);
+                              };
+                              loadData();
+               } catch (error) {
                               alert(error.message);
-               }
-
-
-
-
-
-               
+               };
 };
 
 async function onDelete(event) {
@@ -136,7 +131,7 @@ async function onDelete(event) {
                await fetch(`http://localhost:3030/data/catches/${id}`, {
                               method: 'delete',
                               headers: {
-                                             'Content-Type': 'applications/json',
+                                             'Content-Type': 'application/json',
                                              'X-Authorization': userData.token
                               }
                });
@@ -167,8 +162,7 @@ function e(tagName, className, attrNames, ...text) {
                return tag;
 };
 //welcome, chenge the name
-//logout function
-//delete and update functionality
+//register functionality
 
 
 

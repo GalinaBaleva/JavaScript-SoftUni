@@ -62,7 +62,7 @@ async function onEditSubmit(id, title, author, event) {
                const options = {
                               method: 'put',
                               headers: {
-                                             'Content-Type': 'applications/json'
+                                             'Content-Type': 'application/json'
                               },
                               body: JSON.stringify({ title: title.value, author: author.value })
                };
@@ -91,7 +91,7 @@ async function createRow(event) {
                const options = {
                               method: 'post',
                               headers: {
-                                             'Content-Type': 'applications/json'
+                                             'Content-Type': 'application/json'
                               },
                               body: JSON.stringify({ title: titleToCreate, author: titleToCreate })
                };
@@ -106,7 +106,7 @@ async function onDelete(event) {
                const options = {
                               method: 'delete',
                               headers: {
-                                             'Content-Type': 'applications/json'
+                                             'Content-Type': 'application/json'
                               }
                };
                const answer = await requests(parent.dataset.id, options);
