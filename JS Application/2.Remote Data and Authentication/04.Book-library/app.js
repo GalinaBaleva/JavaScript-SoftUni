@@ -98,8 +98,8 @@ async function createRow(event) {
 
                const res = await requests(undefined, options);
                createForm.reset();
-               loadingContent()
-}
+               loadingContent();
+};
 
 async function onDelete(event) {
                const parent = event.target.parentElement;

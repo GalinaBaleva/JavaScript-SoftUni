@@ -7,6 +7,8 @@ window.addEventListener('DOMContentLoaded', () => {
                if (userData != null) {
                               document.getElementById('guest').style.display = 'none';
                               document.querySelector('#addForm .add').disabled = false;
+                              const welcomeGuest = document.querySelector('.email span');
+                              welcomeGuest.textContent = userData.email;
                } else {
                               document.getElementById('user').style.display = 'none';
                };
@@ -84,8 +86,7 @@ function createAngler(el) {
                               e('label', '', [], 'Bait'),
                               e('input', 'bait', [['type', 'text'], ['value', el.bait], isUser], ''),
                               e('label', '', [], 'Capture Time'),
-                              e('input', 'captureTime', [['type', 'number'], ['value', el.captureTime], ['disabled', isUser]], ''),
-                              e('label', '', [], 'Capture Time'),
+                              e('input', 'captureTime', [['type', 'number'], ['value', el.captureTime], isUser], ''),
                               updateBtn,
                               deleteBtn
                );
