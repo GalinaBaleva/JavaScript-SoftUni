@@ -38,7 +38,6 @@ async function onSubmit(event) {
 
                const formData = new FormData(event.target);
                const data = [...formData.entries()].reduce((a, [key, value]) => Object.assign(a, { [key]: value }), {});
-               console.log(data)
 
                try {
                               if (Object.values(data).some(x => x == '')) {
