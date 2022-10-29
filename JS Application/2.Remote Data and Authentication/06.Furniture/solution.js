@@ -6,8 +6,13 @@ function solve() {
     registerForm.addEventListener('submit', onRegisterSubmit);
     loginForm.addEventListener('submit', onLogin);
   } else {
+
+    if (sessionStorage.authToken === undefined) {
+      window.location = '/2.Remote Data and Authentication/06.Furniture/home.html';
+    };
+
     const createForme = first;
-    createForme.addEventListener('submit', onCreate)
+    createForme.addEventListener('submit', onCreate);
   };
 
 
@@ -80,7 +85,7 @@ function solve() {
     };
   };
 
-  async function sendingRequests(url, type, body) {
+  async function sendingRequests(url, type, body, authToken) {
     const options = {
       method: type,
       headers: {
@@ -91,6 +96,9 @@ function solve() {
     if (body != undefined) {
       options.body = JSON.stringify(body);
     };
+    if(authToken != undefined){
+      options.headers[X-Authorization] = authToken;
+    }
 
     const res = await fetch(url, options);
     const data = res.json();
@@ -102,7 +110,18 @@ function solve() {
 
   async function onCreate(event) {
     event.preventDefault();
-    console.log(event)
+    const dataCreate = new FormData(event.target);
+    const some = [...dataCreate.values()].some(x => x == '');
+    const body = dataCreate.reduce((acc, curent) => Object.assign(acc, {curent}, {}) );
+    console.log(body)
+    if (some === true) {
+      alert(`All fields are required!`);
+      return;
+    };
+    //sendingRequests('http://localhost:3030/data/furniture', 'post', dataCreate, authToken)
+
+
+
   }
 
 }
