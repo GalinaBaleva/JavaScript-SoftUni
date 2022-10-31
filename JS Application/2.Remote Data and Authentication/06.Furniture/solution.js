@@ -191,7 +191,7 @@ function solve() {
     });
     
     // const results = bodys.map( body => async function () { await sendingRequests('http://localhost:3030/data/orders', 'post', body, sessionStorage.authToken)});
-    const result = await sendingRequests('http://localhost:3030/data/orders', 'post', bodys[0], sessionStorage.authToken);
+    const result = await sendingRequests('http://localhost:3030/data/orders', 'post', bodys[0], sessionStorage.getItem('authToken'));
     console.log(result)// Error "Invalid access token" with correct token
   };
 };
