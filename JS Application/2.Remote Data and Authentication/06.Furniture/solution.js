@@ -183,16 +183,38 @@ function solve() {
   async function toBuy(event) {
 
     const cheked = [...tbody.querySelectorAll('input')].filter(x => x.checked);
+
+    if(cheked.length === 0){
+      alert(`Pleace select the product!`);
+      return;
+    };
+
     const products = cheked.map(elem => elem.parentElement.parentElement);
+    
     const bodys = products.map(tr => {
       const [name, price, factor] = tr.querySelectorAll('td p');
 
       return { name: name.textContent, price: price.textContent };
     });
+
+     try { 
+
+      const data = await Promise.all([
+        bodys.forEach(el => sendingRequests('http://localhost:3030/data/orders', 'post', el, sessionStorage.authToken))
+      ]);
+      // if([...data][0]._ownerId === undefined){
+      //   const error = [...data][0];
+      //   throw new Error(error.message);
+      // }
+      console.log(data)
+    } catch (error){
+        alert(error.message);
+      }
+
+
+    console.log(data);
     
-    // const results = bodys.map( body => async function () { await sendingRequests('http://localhost:3030/data/orders', 'post', body, sessionStorage.authToken)});
-    const result = await sendingRequests('http://localhost:3030/data/orders', 'post', bodys[0], sessionStorage.getItem('authToken'));
-    console.log(result)// Error "Invalid access token" with correct token
+    [...tbody.querySelectorAll('input')].map(x => x.checked = false);
   };
 };
 solve()
