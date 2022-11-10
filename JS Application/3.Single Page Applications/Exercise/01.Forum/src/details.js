@@ -1,3 +1,5 @@
+import { el } from './util.js';
+
 const detailsView = document.getElementById('detailsView');
 detailsView.remove();
 
