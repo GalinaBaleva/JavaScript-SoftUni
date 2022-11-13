@@ -24,6 +24,7 @@ export function showHome(ev) {
 
 async function loadingComments() {
                const commentsSection = main.querySelector('#comments');
+               commentsSection.replaceChildren();
                try {
 
                               const res = await fetch(`http://localhost:3030/jsonstore/collections/myboard/posts`);
@@ -40,8 +41,8 @@ async function loadingComments() {
 
                               commentsSection.replaceChildren();
                               Object.values(data).forEach(com => {
-                                             
-                                             commentsCreator(com);
+
+                                             commentsSection.appendChild(commentsCreator(com));
                               })
                } catch (error) {
                               return error.message;
@@ -51,18 +52,19 @@ async function loadingComments() {
 function commentsCreator(data) {
                const h2 = el('h2', '', [], data.topicName);
                h2.addEventListener('click', showDetails);
-               const a = el('a', 'normal', [['href', '#']], h2);
-               a.addEventListener('click', showDetails);
-               const div = el('div', 'topic-container', [['data-id', data._id]],
-                              el('div', 'topic-name-wrapper', [],
-                                             el('div', 'topic-name', [],
-                                                            a,
-                                                            el('div', 'columns', [],
-                                                                           el('div', '', [],
-                                                                                          el('p', '', [], `'Data': ${data.dataCreated}`),
-                                                                                          el('div', 'nick-name', [],
-                                                                                                         el('p', '', [],
-                                                                                                                        el('span', '', [], data.username)
+               const a = el('a', 'normal', [['href', '#'], ['data-id', data._id]], h2);
+               const div = el('div', 'topic-title', [],
+                              el('div', 'topic-container', [],
+                                             el('div', 'topic-name-wrapper', [],
+                                                            el('div', 'topic-name', [],
+                                                                           a,
+                                                                           el('div', 'columns', [],
+                                                                                          el('div', '', [],
+                                                                                                         el('p', '', [], `Data: ${data.dataCreated}`),
+                                                                                                         el('div', 'nick-name', [],
+                                                                                                                        el('p', '', [],
+                                                                                                                                       el('span', '', [], data.username)
+                                                                                                                        )
                                                                                                          )
                                                                                           )
                                                                            )
@@ -70,7 +72,7 @@ function commentsCreator(data) {
                                              )
                               )
                )
-               main.appendChild(div);
+               return div;
 };
 
 

@@ -10,12 +10,31 @@ export function showDetails(event) {
                };
 
                if (target.tagName == 'A') {
-                              console.log(`a is cliked`);
                               event.preventDefault();
-                              showPost();
+                              const id = target.dataset.id;
+                              showPost(id);
                };
 };
 
-function showPost(id) {
+
+
+async function showPost(id) {
+               document.getElementsByTagName('main')[0].replaceChildren(`Loading...`);
+               const commentSection = detailsView.querySelector('.comment');
+
+               const [res, resCommenst] = await Promise.all([
+                              fetch (`http://localhost:3030/jsonstore/collections/myboard/posts/` + id),
+                              fetch (`http://localhost:3030/jsonstore/collections/myboard/comments`)
+               ]);
+
+               const [data, dataComments] = await Promise.all([
+                               res.json(),
+                               resCommenst.json()
+               ]);
+
+               console.log(data, dataComments)
+
+               
+
                document.getElementsByTagName('main')[0].replaceChildren(detailsView);
 }
