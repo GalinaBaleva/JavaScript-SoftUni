@@ -81,7 +81,7 @@ async function onSubmit(ev) {
                const formData = new FormData(form);
 
                const body = [...formData.entries()].reduce((acc, [key, value]) => Object.assign(acc, { [key]: value.trim() }), {});
-               body.dataCreated = new Date().toString();
+               body.dataCreated = new Date();
                const someDataIsMissing = Object.values(body).some(x => x === '');
 
                try {
