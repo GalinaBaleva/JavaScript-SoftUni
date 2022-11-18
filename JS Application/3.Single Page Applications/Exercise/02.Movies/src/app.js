@@ -18,9 +18,13 @@ function isLoged(){
                const storrige = sessionStorage.length;
                if(storrige <= 1){
                               [...nav.querySelectorAll('.user')].forEach(li => li.style.display = 'none');
+                              [...nav.querySelectorAll('.guest')].forEach(li => li.style.display = 'inline-block');
                               onLogin();
                } else {
                               [...nav.querySelectorAll('.guest')].forEach(li => li.style.display = 'none');
+                              [...nav.querySelectorAll('.user')].forEach(li => li.style.display = 'inline-block');
+                              toHomePage();
+
                }
 };
 isLoged();

@@ -1,3 +1,4 @@
+import { viewSection } from "./util.js";
 import { onEdit } from "./editMovie.js";
 
 const movieExampleSection = document.getElementById('movie-example');
