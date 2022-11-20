@@ -28,4 +28,6 @@ async function loadingMovies(){
                const data = await res.json();
                
                console.log(data)
+               //make mini views for movies
+               
 }         
