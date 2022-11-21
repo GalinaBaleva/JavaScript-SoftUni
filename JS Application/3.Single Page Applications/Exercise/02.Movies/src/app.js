@@ -13,6 +13,8 @@ const login = nav.querySelector('#login');
 login.addEventListener('click', onLogin);
 const register = nav.querySelector('#register');
 register.addEventListener('click', onRegister);
+const welcome = nav.querySelector('#welcome-msg strong');
+
 
 function isLoged(){
                const storrige = sessionStorage.length;
@@ -23,6 +25,7 @@ function isLoged(){
                } else {
                               [...nav.querySelectorAll('.guest')].forEach(li => li.style.display = 'none');
                               [...nav.querySelectorAll('.user')].forEach(li => li.style.display = 'inline-block');
+                              welcome.textContent = JSON.parse(sessionStorage.getItem('userData')).email;  
                               toHomePage();
 
                }

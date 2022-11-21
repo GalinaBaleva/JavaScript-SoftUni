@@ -3,5 +3,5 @@ editSection.remove();
 
 export function onEdit(event){
                event.preventDefault();
-               
+
 }
