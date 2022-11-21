@@ -12,7 +12,6 @@ const movieList = homepage.querySelector('#movies-list');
 export function toHomePage(event) {
                if (event != undefined) {
                               event.preventDefault();
-                              console.log(event.target)
                };
                viewSection(homepage);
 
@@ -48,5 +47,4 @@ function movieMaker(movie) {
                               )
                );
                movieList.appendChild(divCard);
-
-}
+};

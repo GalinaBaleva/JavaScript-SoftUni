@@ -24,15 +24,18 @@ async function request(id) {
                const divModie = example(data);
                const liked = divModie.querySelector('.liked');
 
-               if (data._ownerId == JSON.parse(sessionStorage.getItem('userData')).id && data._ounerId != undefined) {
+               const owner = JSON.parse(sessionStorage.getItem('userData')).id;
+               if (data._ownerId == owner && data._ownerId != undefined) {
                               [...divModie.querySelectorAll('.owner')].forEach(d => d.style.display = 'inline-block');
                               [...divModie.querySelectorAll('.notOuner')].forEach(d => d.style.display = 'none');
                               liked.style.display = 'none';
+                              //make functionality for likes count
 
                } else {
                               [...divModie.querySelectorAll('.owner')].forEach(d => d.style.display = 'none');
                               [...divModie.querySelectorAll('.notOuner')].forEach(d => d.style.display = 'inline-block');
                               liked.style.display = 'none';
+                              //make functionality for likes count
                };
 
                movieExampleSection.replaceChildren(divModie);
@@ -68,6 +71,16 @@ function example(data) {
 
 async function onDelete(event) {
                event.preventDefault();
-               console.log(event.target)
+               const id = event.target.parentElement.parentElement.id;
+
+               await fetch(`http://localhost:3030/data/movies/${id}`, {
+                              method: 'delete',
+                              headers: {
+                                             'Content-Type': 'application/json',
+                                             'X-Authorization': JSON.parse(sessionStorage.getItem('userData')).accessToken
+                              }
+               });
+
+               window.location = '/';
 }
 
