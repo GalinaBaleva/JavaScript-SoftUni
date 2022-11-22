@@ -42,7 +42,6 @@ async function onsubmit(event){
 
                               const data = await res.json();
 
-                              console.log(data)
                               window.location = '/';
 
                } catch (error) {

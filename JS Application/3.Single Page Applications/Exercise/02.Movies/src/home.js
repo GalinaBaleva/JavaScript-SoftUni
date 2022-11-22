@@ -5,14 +5,18 @@ import { viewSection, el } from "./util.js";
 const homepage = document.getElementById('home-page');
 homepage.remove()
 
+import { onLogin } from "./login.js";
+
 const addBtn = homepage.querySelector('#add-movie-button a');
 addBtn.addEventListener('click', onAdding);
 const movieList = homepage.querySelector('#movies-list');
 
 export function toHomePage(event) {
+
                if (event != undefined) {
                               event.preventDefault();
                };
+
                viewSection(homepage);
 
                loadingMovies();

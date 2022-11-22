@@ -24,7 +24,7 @@ async function request(id) {
                const divModie = example(data);
                const liked = divModie.querySelector('.liked');
 
-               const owner = JSON.parse(sessionStorage.getItem('userData')).id;
+               const owner = JSON.parse(sessionStorage.getItem('userData'))._id;
                if (data._ownerId == owner && data._ownerId != undefined) {
                               [...divModie.querySelectorAll('.owner')].forEach(d => d.style.display = 'inline-block');
                               [...divModie.querySelectorAll('.notOuner')].forEach(d => d.style.display = 'none');
