@@ -3,52 +3,26 @@
 // handle form submit
 // send login information to REST service
 // store authorization token
+import { createSubmitHandler, setUserData } from './util.js';
+import { post } from "./api.js";
 
-import { checkUserNav } from './auth.js';
-import { showCatalogView } from './catalog.js';
-
-document.getElementById('login-form').addEventListener('submit', onLogin);
+createSubmitHandler('login-form', onLogin);
 
 const section = document.getElementById('login-view');
 section.remove();
 
-export function showLoginView() {
-    document.querySelector('main').appendChild(section);
+let ctx = null;
+
+export function showLoginView(inCtx) {
+    ctx = inCtx;
+    ctx.render(section);
 }
 
-async function onLogin(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const { email, password } = Object.fromEntries(formData);
+async function onLogin({email, password}) {
+        const userData = await post('/users/login', {email, password});
 
-    try {
-        await request(email, password);
+        setUserData(userData);
 
-        sessionStorage.setItem('userId', data._id);
-        sessionStorage.setItem('username', data.username);
-        sessionStorage.setItem('accessToken', data.accessToken);
-
-        checkUserNav();
-        showCatalogView();
-    } catch (err) {
-        alert(err.message);
-    }
-}
-
-async function login(email, password) {
-    const response = await fetch(, {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-    });
-
-    if (response.ok != true) {
-        const error = await response.json();
-        throw new Error(error.message);
-    }
-
-    const data = await response.json();
-
+        ctx.checkUserNav();
+        ctx.goto('catalog-link');
 }

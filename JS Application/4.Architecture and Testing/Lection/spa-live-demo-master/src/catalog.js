@@ -1,4 +1,6 @@
 import { showDetailsView } from './details.js';
+import { get } from './api.js';
+
 
 
 // get data from REST service
@@ -10,21 +12,20 @@ document.getElementById('catalog-link').addEventListener('click', showCatalogVie
 const section = document.getElementById('catalog-view');
 section.remove();
 
-export async function showCatalogView() { 
+let ctx = null;
+
+export async function showCatalogView(inCtx) { 
+    ctx = inCtx;
+    ctx.render(section);
+    displayRecipes([]);
     const recipes = await getAllRecipes();
     
-    document.querySelector('main').appendChild(section);
-    
-    document.getElementById('catalog-view').style.display = 'block';
 
     displayRecipes(recipes);
-
-
 }
 
 async function getAllRecipes() {
-    const response = await fetch('http://localhost:3030/data/recipes?select=' + encodeURIComponent('_id,name'));
-    const recipes = await response.json();
+    const recipes = await get('/data/recipes?select=' + encodeURIComponent('_id,name'));
 
     return recipes;
 }
@@ -58,7 +59,7 @@ function openRecipe(event) {
     if (event.target.tagName == 'A') {
         event.preventDefault();
         const id = event.target.id;
-        showDetailsView(id);
+        ctx.goto('details-link', id);
     }
 }
 

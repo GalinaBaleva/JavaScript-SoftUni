@@ -1,24 +1,22 @@
 // get information about single recipe by id
 // display all information about recipe
+import { get } from "./api.js";
 
 const section = document.getElementById('details-view');
 section.remove();
 
-export async function showDetailsView(id) {
-    const recipe = await getById(id);
+export async function showDetailsView(ctx, id) {
+    ctx.render(section);
+    displayRecipe({
+        name: 'Loading...',
+        ingredients: [],
+        steps: []
+    });
+    const recipe = await get('/data/recipes/' + id);
     
-    document.querySelector('main').appendChild(section);
 
     displayRecipe(recipe);
-}
-
-
-async function getById(id) {
-    const response = await fetch('http://localhost:3030/data/recipes/' + id);
-    const recipe = await response.json();
-
-    return recipe;
-}
+};
 
 function displayRecipe(recipe) {
     document.getElementById('recipe-name').textContent = recipe.name;

@@ -44,6 +44,7 @@
     <nav>
         <a id="home-link" href="javascript:void(0)">Home</a>
         <a id="catalog-link" href="javascript:void(0)">Catalog</a>
+        <a class="user"  id="create-link" href="javascript:void(0)">Create</a>
         <a class="guest" id="login-link" href="javascript:void(0)">Login</a>
         <a class="guest" id="register-link" href="javascript:void(0)">Register</a>
         <span class="user" id="welcome-msg"></span>
@@ -94,6 +95,18 @@
             <label>Password: <input type="password" name="password"></label>
             <label>Repeat: <input type="password" name="repass"></label>
             <button>Register</button>
+        </form>
+    </section>
+
+    <section id="create-view">
+        <h2>Create Recepe</h2>
+
+        <form id="create-form">
+            <label>Name: <input type="text" name="name"></label>
+            <label>Img: <input type="text" name="img"></label>
+            <label>Ingredients: <textarea name="ingredients"></textarea></label>
+            <label>Steps: <textarea name="steps"></textarea></label>
+            <button>Post</button>
         </form>
     </section>
 </body>
