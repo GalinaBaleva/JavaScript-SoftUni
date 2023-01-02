@@ -77,7 +77,6 @@ async function onDelete(event, id) {
     try {
         const res = await fetch(url2, options);
         const respons = await res.json();
-        event.target.parentNode.remove()
 
     } catch (error) {
         return;
