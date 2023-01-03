@@ -1,0 +1,42 @@
+const host = 'http://lockalhost:3030';
+
+export async function request(method, url, data) {
+    const options = {
+        method,
+        headers: {}
+    };
+
+    if (data) {
+        options.headers['Content-Type'] = 'application/json';
+        options.body = JSON.stringify(data);
+    };
+
+    const token = sessionStorage.getItem('accessToken');
+
+    if (token) {
+        options.headers['X-Authorization'] = 'token';
+    };
+
+    try {
+        const response = await fetch(host + url, options);
+
+        if (response.ok != true) {
+            throw new Error(erroe.message);
+        };
+
+        if (response.startus == 204) {
+            return response;
+        };
+
+        return response.json();
+
+    } catch (err) {
+        alert(err.message);
+        throw err;
+    };
+};
+
+export const get = request.bind(null, 'get');
+export const post = request.bind(null, 'post');
+export const put = request.bind(null, 'put');
+export const del = request.bind(null, 'delete');
