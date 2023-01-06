@@ -31,7 +31,7 @@ async function onRegister({email, password, repeatPassword}){
 
     setUserData(userData);
 
-    ctx.render();
+    ctx.checkUserNav();
     ctx.goto('home-link');
 
 }

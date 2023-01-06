@@ -1,11 +1,11 @@
 export function checkUserNav() {
-    const tocken = sessionStorage.getItem('userData');
+    const tocken = sessionStorage.getItem('accessToken');
     if (tocken) {
-        [...document.querySelectorAll('.guest')].forEach(s => s.style.dispaly = 'none');
-        [...document.querySelectorAll('.user')].forEach(s => s.style.display = 'inline-block');
+        [...document.querySelectorAll('.guest')].forEach(i => i.parentElement.style.display = 'none');
+        [...document.querySelectorAll('.user')].forEach(i => i.parentElement.style.display = 'inline');
     } else {
-        [...document.querySelectorAll('.user')].forEach(s => s.style.display = 'none');
-        [...document.querySelectorAll('.guest')].forEach(s => s.style.dispaly = 'inline-block');
+        [...document.querySelectorAll('.user')].forEach(i => i.parentElement.style.display = 'none');
+        [...document.querySelectorAll('.guest')].forEach(i => i.parentElement.style.display = 'inline');
     }
 }
 
