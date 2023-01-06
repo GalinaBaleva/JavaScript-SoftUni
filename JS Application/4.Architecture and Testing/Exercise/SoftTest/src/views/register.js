@@ -1,5 +1,5 @@
 import { post } from "../api/api.js";
-import { createSubmitHandler } from "../util.js";
+import { createSubmitHandler, setUserData } from "../util.js";
 
 createSubmitHandler('registerView', onRegister);
 
@@ -13,21 +13,25 @@ export function registerView(viewFuncs){
     ctx.render(section);
 }
 
-function onRegister({email, password, repeatPassword}){
-    let isTrue = true;
+async function onRegister({email, password, repeatPassword}){
 
-    if(email.length < 4){
-        alert('The email should be at least 3 characters long!');
-        isTrue = false;
+    if(email.length < 3){
+        return alert('The email should be at least 3 characters long!');
     };
 
-    if(password.length < 4){
-        alert('The password should be at least 3 characters long!');
-        isTrue = false;
+    if(password.length < 3){
+        return alert('The password should be at least 3 characters long!');
     };
 
     if(password !== repeatPassword){
-        alert('Password don\'t match!');
-        isTrue = false;
+        return alert('Password don\'t match!');
     };
+
+    const userData = await post('/users/register', {email, password});
+
+    setUserData(userData);
+
+    ctx.render();
+    ctx.goto('home-link');
+
 }

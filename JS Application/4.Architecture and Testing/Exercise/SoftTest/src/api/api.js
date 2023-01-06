@@ -1,4 +1,4 @@
-const host = 'http://lockalhost:3030';
+const host = 'http://localhost:3030';
 
 export async function request(method, url, data) {
     const options = {
@@ -21,8 +21,9 @@ export async function request(method, url, data) {
         const response = await fetch(host + url, options);
 
         if (response.ok != true) {
-            throw new Error(erroe.message);
-        };
+            const error = await response.json();
+            throw new Error(error.message);
+        }
 
         if (response.startus == 204) {
             return response;

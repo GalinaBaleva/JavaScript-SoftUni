@@ -1,12 +1,12 @@
 export  function setUserData(data){
     sessionStorage.setItem('userId', data._id);
-    sessionStorage.setItem('username', data.username);
+    sessionStorage.setItem('email', data.email);
     sessionStorage.setItem('accessToken', data.accessToken);
 };
 
 export function crearData(){
     sessionStorage.removeItem('userId');
-    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('email');
     sessionStorage.removeItem('accessToken');
 };
 
