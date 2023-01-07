@@ -4,7 +4,7 @@ export  function setUserData(data){
     sessionStorage.setItem('accessToken', data.accessToken);
 };
 
-export function crearData(){
+export function crearUserData(){
     sessionStorage.removeItem('userId');
     sessionStorage.removeItem('email');
     sessionStorage.removeItem('accessToken');
@@ -19,7 +19,6 @@ export function createSubmitHandler(formId, callback){
         const data = Object.fromEntries(formData);
 
         callback(data, event);
-        
     };
 
 

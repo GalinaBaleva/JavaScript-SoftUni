@@ -1,6 +1,9 @@
 const section = document.getElementById('homeView');
 section.remove();
 
-export function homeView(ctx){
+let ctx = null;
+
+export function homeView(inCtx){
+    ctx = inCtx;
     ctx.render(section);
 }
