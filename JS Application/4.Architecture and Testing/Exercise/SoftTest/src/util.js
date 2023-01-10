@@ -4,7 +4,7 @@ export  function setUserData(data){
     sessionStorage.setItem('accessToken', data.accessToken);
 };
 
-export function crearUserData(){
+export function clearUserData(){
     sessionStorage.removeItem('userId');
     sessionStorage.removeItem('email');
     sessionStorage.removeItem('accessToken');

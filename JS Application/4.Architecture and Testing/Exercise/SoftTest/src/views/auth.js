@@ -1,3 +1,6 @@
+import { clearUserData } from "../util.js";
+import { get } from "../api/api.js"
+
 export function checkUserNav() {
     const tocken = sessionStorage.getItem('accessToken');
     if (tocken) {
@@ -11,6 +14,10 @@ export function checkUserNav() {
 
 
 export function onLogout(ctx) {
+    get('/users/logout');
 
+    clearUserData();
+    ctx.checkUserNav();
+    ctx.goto('home-link');
 };
 

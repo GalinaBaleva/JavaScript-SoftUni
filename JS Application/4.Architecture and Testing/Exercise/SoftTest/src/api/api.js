@@ -14,7 +14,7 @@ export async function request(method, url, data) {
     const token = sessionStorage.getItem('accessToken');
 
     if (token) {
-        options.headers['X-Authorization'] = 'token';
+        options.headers['X-Authorization'] = token;
     };
 
     try {
@@ -25,7 +25,7 @@ export async function request(method, url, data) {
             throw new Error(error.message);
         }
 
-        if (response.startus == 204) {
+        if (response.status == 204) {
             return response;
         };
 
