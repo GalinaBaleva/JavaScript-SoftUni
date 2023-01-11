@@ -20,7 +20,6 @@ export async function dashboardView(inCtx) {
         data.map(item => cardCreater(item));
     };
 
-
     ctx.render(section);
 };
 
