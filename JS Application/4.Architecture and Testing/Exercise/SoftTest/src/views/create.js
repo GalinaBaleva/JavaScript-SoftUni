@@ -6,11 +6,14 @@ createSubmitHandler('createView', onCreate);
 const section = document.getElementById('createView');
 section.remove();
 
+let ctx = null;
 
-export function createView(ctx){
+
+export function createView(inCtx){
+    ctx = inCtx;
     ctx.checkUserNav();
     ctx.render(section);
-}
+};
 
 async function onCreate(data, event){
     if(data.title < 6){
@@ -28,6 +31,14 @@ async function onCreate(data, event){
         return;
     };
 
-    const response = post('/data/ideas', data);
+    const body = {
+        title: data.title,
+        description: data.description,
+        img: data.imageURL
+    }
 
-}
+    const response = post('/data/ideas', body);
+
+    ctx.checkUserNav();
+    ctx.goto('dashboard-link')
+};
