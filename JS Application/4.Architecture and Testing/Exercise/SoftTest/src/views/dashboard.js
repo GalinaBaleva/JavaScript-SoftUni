@@ -24,13 +24,24 @@ export async function dashboardView(inCtx) {
 };
 
 function cardCreater(cardItem) {
+    const btn = el('a', ['btn'], [], 'Details');
+    btn.addElentListener('click', onClick)
     const divCard = el('div', ['card', 'overflow-hidden', 'current-card', 'details'], [['id', cardItem._id]],
         el('div', ['card-body'], [],
             el('p', ['card-text'], [], cardItem.title)
         ),
         el('img', ['card-image'], [['src', cardItem.img], ['alt', 'Card image cap']], ''),
-        el('a', ['btn'], [], 'Details')
+        btn
     );
     section.appendChild(divCard);
+};
+
+function onClick(event){
+
+    ctx.goto('detailsView');
+
+    //thou options to transfer event
+
+
 }
 

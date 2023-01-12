@@ -19,6 +19,8 @@ export function createSubmitHandler(formId, callback) {
         const data = Object.fromEntries(formData);
 
         callback(data, event);
+
+        event.target.reset();
     };
 };
 

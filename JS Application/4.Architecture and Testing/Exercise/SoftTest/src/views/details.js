@@ -1,6 +1,11 @@
 const section =  document.getElementById('detailsView');
 section.remove();
 
-export function detailsView(ctx){
+const ctx = null;
+
+export function detailsView(inCtx){
+    ctx = inCtx;
+    
+
     ctx.render(section);
 }
