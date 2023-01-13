@@ -46,7 +46,7 @@ function goto(viewName, ...params){
             goto,
             checkUserNav,
             render,
-            options: null
+            options: params
         });
         return true;
     };

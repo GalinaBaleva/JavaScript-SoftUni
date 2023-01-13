@@ -1,11 +1,13 @@
 const section =  document.getElementById('detailsView');
 section.remove();
 
-const ctx = null;
+let ctx = null;
 
 export function detailsView(inCtx){
     ctx = inCtx;
-    
+
 
     ctx.render(section);
+
+    console.log(ctx.options[0].target);
 }

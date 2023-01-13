@@ -25,7 +25,10 @@ export async function dashboardView(inCtx) {
 
 function cardCreater(cardItem) {
     const btn = el('a', ['btn'], [], 'Details');
-    btn.addElentListener('click', onClick)
+    btn.addEventListener('click', (event) => {
+        ctx.goto('detailsView', event);
+
+    })
     const divCard = el('div', ['card', 'overflow-hidden', 'current-card', 'details'], [['id', cardItem._id]],
         el('div', ['card-body'], [],
             el('p', ['card-text'], [], cardItem.title)
@@ -36,12 +39,4 @@ function cardCreater(cardItem) {
     section.appendChild(divCard);
 };
 
-function onClick(event){
-
-    ctx.goto('detailsView');
-
-    //thou options to transfer event
-
-
-}
 
