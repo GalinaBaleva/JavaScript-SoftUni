@@ -24,7 +24,7 @@ export async function dashboardView(inCtx) {
 };
 
 function cardCreater(cardItem) {
-    const btn = el('a', ['btn'], [], 'Details');
+    const btn = el('a', ['btn'], [['href', '']], 'Details');
     btn.addEventListener('click', (event) => {
         ctx.goto('detailsView', event);
 
