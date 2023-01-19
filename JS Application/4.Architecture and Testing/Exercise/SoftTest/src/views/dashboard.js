@@ -24,7 +24,7 @@ export async function dashboardView(inCtx) {
 };
 
 function cardCreater(cardItem) {
-    const btn = el('a', ['btn'], [['href', '']], 'Details');
+    const btn = el('a', ['btn'], [['href', ""]], 'Details');
     btn.addEventListener('click', (event) => {
         event.preventDefault();
         ctx.goto('detailsView', event.target.parentElement.id);
@@ -34,7 +34,7 @@ function cardCreater(cardItem) {
         el('div', ['card-body'], [],
             el('p', ['card-text'], [], cardItem.title)
         ),
-        el('img', ['card-image'], [['src', cardItem.img], ['alt', 'Card image cap']], ''),
+        el('img', ['card-image'], [['src', cardItem.img], ['alt', cardItem.title]], ''),
         btn
     );
     section.appendChild(divCard);

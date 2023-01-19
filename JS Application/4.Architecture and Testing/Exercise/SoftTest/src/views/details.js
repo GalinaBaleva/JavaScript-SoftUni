@@ -1,4 +1,4 @@
-import { get } from "../api/api.js";
+import { get, del } from "../api/api.js";
 import { el } from "../util.js";
 
 const section = document.getElementById('detailsView');
@@ -25,14 +25,22 @@ export async function detailsView(inCtx) {
 
     if (me) {
         if (me._id === data._ownerId) {
-            const deleteSection = el('div', ['text-center'], [['_id', data._id]],
-                el('a', ['btn', 'detb'], [['href', '']], 'Delete')
+            const deleteSection = el('div', ['text-center'], [['id', data._id]],
+                el('a', ['btn', 'detb'], [['href', ""]], 'Delete')
             );
+            deleteSection.addEventListener('click', onDelete);
             section.appendChild(deleteSection);
         }
     }
 
+    const btn = section.querySelector('div a');
 
+    if (btn) {
+        console.log(btn)
+    }
+
+    //1) non-author does NOT see delete button
+    //2) author sees delete button
 
 
     ctx.render(section);
@@ -48,4 +56,13 @@ function createDetailsCard(data) {
     );
     section.appendChild(img);
     section.appendChild(div);
+}
+
+async function onDelete(event) {
+    event.preventDefault();
+    const id = event.target.parentElement.id;
+
+    del('/data/ideas/' + id);
+
+    ctx.goto('dashboard-link');
 }
