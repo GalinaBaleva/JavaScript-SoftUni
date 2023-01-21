@@ -23,11 +23,7 @@ render(contacts.map(contactsCard), root)
 
 function onClick(id, event) {
     const index = contacts.find(x => x.id == id);
-    const div = event.target.parentElement.querySelector('div .details');
-    console.log(div.style.display = 'inline-block')
-    if (div.style.display == 'none') {
-        div.style.display == 'inline-block';
-    } else if (div.style.display == 'inline-block') {
-        div.style.display == 'none';
-    }
+
+    const div = event.target.parentElement.querySelector('.info>div');
+    div.className = div.className === 'details' ? 'inactive' : 'details'
 }
