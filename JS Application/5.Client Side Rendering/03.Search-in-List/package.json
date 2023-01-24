@@ -1,0 +1,21 @@
+{
+  "name": "03.search-in-list",
+  "version": "1.0.0",
+  "description": "",
+  "main": "search.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "playwright-chromium": "^1.29.2"
+  },
+  "dependencies": {
+    "chai": "^4.3.7",
+    "lit-html": "^2.6.1"
+  }
+}
