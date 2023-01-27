@@ -1,0 +1,21 @@
+{
+  "name": "04.fill-dropdown",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dropdown.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "playwright-chromium": "^1.30.0"
+  },
+  "dependencies": {
+    "chai": "^4.3.7",
+    "lit-html": "^2.6.1"
+  }
+}
