@@ -1,0 +1,21 @@
+{
+  "name": "06.book-library",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "lit-html": "^2.6.1",
+    "playwright-chromium": "^1.30.0"
+  },
+  "dependencies": {
+    "chai": "^4.3.7"
+  }
+}
