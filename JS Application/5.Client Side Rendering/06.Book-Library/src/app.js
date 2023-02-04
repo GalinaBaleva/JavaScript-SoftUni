@@ -1,8 +1,8 @@
 import { html, render } from '../node_modules/lit-html/lit-html.js';
 import { repeat } from '../node_modules/lit-html/directives/repeat.js';
 import { get } from "./api.js";
-import { addFrom } from './addBook.js';
-import { onEdit } from './editBook.js';
+import { addForm } from './frorms.js';
+
 
 const root = document.querySelector('body');
 
@@ -34,11 +34,15 @@ async function loadingContent() {
                 </tr>`)}
             </tbody>
         </table>
-        
-        ${addFrom()}`;
+        ${await addForm()}
+        `;
     render(main, root);
 }
 
 function onDelete(event){
     console.log(event);
+}
+
+async function onEdit(event){
+ await addForm(event)
 }
