@@ -1,18 +1,18 @@
 import { html, render } from '../node_modules/lit-html/lit-html.js';
 import { repeat } from '../node_modules/lit-html/directives/repeat.js';
-import { get } from "./api.js";
+import { del, get } from "./api.js";
 import { addForm } from './frorms.js';
 
 
-const root = document.querySelector('body');
 
 loadingContent();
 
 async function loadingContent() {
-    const data = await get('/jsonstore/collections/books');
+    const root = document.querySelector('body');
+
 
     const main = html`
-        <button id="loadBooks">LOAD ALL BOOKS</button>
+        <button id="loadBooks" @click=${onLoad}>LOAD ALL BOOKS</button>
         <table>
             <thead>
                 <tr>
@@ -23,26 +23,37 @@ async function loadingContent() {
             </thead>
         
             <tbody>
-                ${repeat(Object.entries(data), book => book[0], book => html`
-                <tr>
-                    <td>${book[1].author}</td>
-                    <td>${book[1].title}</td>
-                    <td>
-                        <button @click=${onEdit.bind(null, book[0])}>Edit</button>
-                        <button @click=${onDelete.bind(null, book[0])}>Delete</button>
-                    </td>
-                </tr>`)}
+        
             </tbody>
         </table>
         ${await addForm()}
         `;
     render(main, root);
+};
+
+async function onLoad() {
+    const root = document.querySelector('tbody');
+    const data = await get('/jsonstore/collections/books');
+
+    const books = html`
+    ${repeat(Object.entries(data), book => book[0], book => html`
+    <tr>
+        <td>${book[1].author}</td>
+        <td>${book[1].title}</td>
+        <td>
+            <button @click=${onEdit.bind(null, book[0])}>Edit</button>
+            <button @click=${onDelete.bind(null, book[0])}>Delete</button>
+        </td>
+    </tr>`)}`
+    render(books, root)
+    
 }
 
-function onDelete(event){
-    console.log(event);
-}
+async function onEdit(event) {
+    await addForm(event)
+};
 
-async function onEdit(event){
- await addForm(event)
+async function onDelete(id) {
+    del(`/jsonstore/collections/books/${id}`);
+    loadingContent();
 }

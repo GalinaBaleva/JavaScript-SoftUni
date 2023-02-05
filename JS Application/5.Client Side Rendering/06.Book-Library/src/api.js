@@ -19,6 +19,10 @@ async function request(method, url, body) {
             throw new Error(error.message);
         };
 
+        if(resp.status == 204){
+            return resp.status;
+        };
+
         const data = resp.json();
 
         return data;
@@ -31,3 +35,4 @@ async function request(method, url, body) {
 export const get = request.bind(null, 'get');
 export const put = request.bind(null, 'put');
 export const post = request.bind(null, 'post');
+export const del = request.bind(null, 'delete');

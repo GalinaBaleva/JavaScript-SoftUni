@@ -1,5 +1,6 @@
 import { html, render } from '../node_modules/lit-html/lit-html.js';
 import { get,} from './api.js';
+import { createBook } from './util.js';
 
 
 export async function addForm(id) {
@@ -19,7 +20,7 @@ export async function addForm(id) {
         return editForm;
     } else {
         const addForm = html`
-        <form id="add-form">
+        <form id="add-form" @submit=${createBook}>
             <h3>Add book</h3>
             <label>TITLE</label>
             <input type="text" name="title" placeholder="Title...">
