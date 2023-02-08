@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "lit-html": "^2.6.1",
     "page": "^1.11.6"
   }
 }
