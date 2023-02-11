@@ -9,7 +9,7 @@ const catalogTmplate = (recipes) => html`
 </ul>`;
 
 const recipeCardTemplate = (recipe) => html`
-<li><a href=${'/recipes/' + recipe._id}>${recipe.neme}</a></li>`
+<li><a href=${'/recipes/' + recipe._id}>${recipe.name}</a></li>`
 
 export async function showCatalog(ctx) {
     ctx.render(html`<p>Loding &hellip;</p>`)
