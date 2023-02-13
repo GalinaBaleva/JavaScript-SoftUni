@@ -1,41 +1,19 @@
-const host = 'http://localhost:3030';
+import { html, render } from './lib.js';
+import { page } from './lib.js';
 
-async function requester(method, url, data){
 
-    const options = {
-        method,
-        headers: {}
+import { checkUserNav } from './views/auth.js';
+
+
+
+function decorationContnt(ctx, next){
+    checkUserNav();
+    ctx.render = function(content){
+        render(content, document.querySelector('.container'));
     };
-
-    if(data){
-        options.headers['Content-Type'] = 'application/json';
-        options.body = JSON.stringify(data);
-    };
-
-    const token = window.sessionStorage.getItem('userData');
-
-    if(token){
-        options.headers['X-Autorisation'] = token.accessToken; // not sure
-    };
-
-
-    try{
-
-        const resp = await fetch(host + url, options);
-
-        if(resp.ok != true){
-            
-        }
-
-    } catch (err){
-        alert(err.message);
-        return err;
-    }
-
+    next();
 };
 
-
-export const get = requester.bind(null, 'get');
-export const post = requester.bind(null, 'post');
-export const put = requester.bind(null, 'put');
-export const del = requester.bind(null, 'del');
+page(decorationContnt);
+page('/index.html', '/');
+page()
