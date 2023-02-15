@@ -1,5 +1,7 @@
+import { html } from "../lib.js";
 
 
-async function viewRegister(){
+export async function showRegister(ctx) {
+    ctx.render(html`<p>Register</p>`);
 
-}
+};
