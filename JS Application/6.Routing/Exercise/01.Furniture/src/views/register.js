@@ -1,5 +1,7 @@
 import { postRegister } from "../data/data.js";
+import { setUserData } from "../data/util.js";
 import { html } from "../lib.js";
+import { page } from '../lib.js'
 
 
 export async function showRegister(ctx) {
@@ -29,32 +31,35 @@ const registerTemplate = html`
                 <label class="form-control-label" for="rePass">Repeat</label>
                 <input class="form-control" id="rePass" type="password" name="rePass">
             </div>
-            <input type="submit"  class="btn btn-primary" value="Register" />
+            <input type="submit" class="btn btn-primary" value="Register" />
         </div>
     </div>
 </form>
 </div>`;
 
-async function onSubmit(event){
+async function onSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const emptiField = [...formData.values()].some(x => x == '');
 
-    if(emptiField){
+    if (emptiField) {
         alert('All fields are reqired!');
         return;
     };
 
-    const data = [...formData.entries()].reduce((acc, curent) => Object.assign(acc, {[curent[0]]: curent[1].trim()}), {});
+    const data = [...formData.entries()].reduce((acc, curent) => Object.assign(acc, { [curent[0]]: curent[1].trim() }), {});
 
 
-    if(data.password !== data.rePass){
+    if (data.password !== data.rePass) {
         alert('Password doesn\'t match!');
         return;
     };
-    
-    const response = await postRegister(data);
 
+    const response = await postRegister(data);
     console.log(response)
 
+    if (response.accessToken) {
+        setUserData(response);
+        page('/register', '/dashboard');
+    };
 };

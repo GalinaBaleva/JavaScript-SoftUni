@@ -4,7 +4,7 @@ const endPoints = {
     'register': '/users/register',
     'login': '/users/login',
     'logout': '/users/logout',
-    'catalog': 'data/catalog',
+    'catalog': '/data/catalog',
     'details': '/data/catalog/'
 
 };
