@@ -5,7 +5,7 @@ import { page } from "../lib.js";
 const root = document.querySelector('nav');
 
 export function checkUserNav() {
-    const token = sessionStorage.getItem('userData');
+    const token = sessionStorage.getItem('accessToken');
     let user = '';
     if (token) {
         user = html`
@@ -17,7 +17,7 @@ export function checkUserNav() {
     } else {
         user = html`
         <div id="guest">
-            <a id="loginLink" href="login.html">Login</a>
+            <a id="loginLink" href="/login">Login</a>
             <a id="registerLink" href="/register">Register</a>
         </div>`;
     };

@@ -1,12 +1,13 @@
 import { postRegister } from "../data/data.js";
 import { setUserData } from "../data/util.js";
 import { html } from "../lib.js";
-import { page } from '../lib.js'
 
+let page = null;
 
 export async function showRegister(ctx) {
+    page = ctx.page;
     ctx.render(registerTemplate);
-
+    
 };
 
 const registerTemplate = html`  
@@ -56,10 +57,9 @@ async function onSubmit(event) {
     };
 
     const response = await postRegister(data);
-    console.log(response)
 
     if (response.accessToken) {
         setUserData(response);
-        page('/register', '/dashboard');
+        page.redirect('/dashboard');
     };
 };

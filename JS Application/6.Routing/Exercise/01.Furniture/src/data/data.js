@@ -16,6 +16,11 @@ export async function postRegister(data){
     return result;
 };
 
+export async function getLogin(data){
+    const result = await get(endPoints.login, data);
+    return result;
+};
+
 
 
 /*

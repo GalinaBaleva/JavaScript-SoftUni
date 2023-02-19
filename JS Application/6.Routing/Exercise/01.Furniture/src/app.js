@@ -4,6 +4,8 @@ import { html, render } from './lib.js';
 
 
 import { checkUserNav } from './views/auth.js';
+import { showDashboard } from './views/dashboard.js';
+import { showLogin } from './views/login.js';
 import { showRegister } from './views/register.js';
 
 
@@ -17,6 +19,8 @@ function decorationContnt(ctx, next){
 page(decorationContnt);
 page('/index.html', '/');
 page('/register', showRegister);
+page('/dashboard', showDashboard)
+page('/login', showLogin)
 
 
 
