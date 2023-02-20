@@ -1,9 +1,11 @@
+import { getLogin } from '../data/data.js';
+import { setUserData } from '../data/util.js';
 import { html } from '../lib.js';
 
-let page = null;
+let ctx = null;
 
-export async function showLogin(ctx) {
-    page = ctx.page;
+export async function showLogin(onCtx) {
+    ctx = onCtx;
     ctx.render(loginTamplate);
 };
 
@@ -30,18 +32,21 @@ const loginTamplate = html`
         </div>
     </form>`;
 
-function onSubmit(e){
+async function onSubmit(e) {
     e.preventDefault();
 
     const formData = new FormData(e.target);
     const emptiField = [...formData.values()].some(x => x == '');
 
-    if(emptiField){
+    if (emptiField) {
         alert('All fields are reqired!');
         return;
     };
 
     const data = [...formData.entries()].reduce((acc, curent) => Object.assign(acc, { [curent[0]]: curent[1].trim() }), {});
 
-    console.log(data);
+    const response = await getLogin(data);
+    setUserData(response);
+    
+    ctx.page.redirect('/dashboard');
 };

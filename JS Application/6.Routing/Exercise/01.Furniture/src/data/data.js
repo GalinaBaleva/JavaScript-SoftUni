@@ -1,4 +1,4 @@
-import { post } from "./api.js";
+import { get, post } from "./api.js";
 
 const endPoints = {
     'register': '/users/register',
@@ -17,7 +17,7 @@ export async function postRegister(data){
 };
 
 export async function getLogin(data){
-    const result = await get(endPoints.login, data);
+    const result = await post(endPoints.login, data);
     return result;
 };
 
