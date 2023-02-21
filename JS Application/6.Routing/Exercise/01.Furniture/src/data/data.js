@@ -16,19 +16,26 @@ export async function postRegister(data){
     return result;
 };
 
-export async function getLogin(data){
+//Login User (POST): http://localhost:3030/users/login
+export async function postLogin(data){
     const result = await post(endPoints.login, data);
     return result;
 };
 
+//Logout User (GET): http://localhost:3030/users/logout
+export async function getLogout(){
+    await get(endPoints.logout);
+};
 
+//All Furniture (GET): http://localhost:3030/data/catalog
+export async function getAllFurniture(){
+    const result = await get(endPoints.catalog);
+    return result;
+};
 
 /*
-Login User (POST): http://localhost:3030/users/login
-Logout User (GET): http://localhost:3030/users/logout
 
 Create Furniture (POST): http://localhost:3030/data/catalog
-All Furniture (GET): http://localhost:3030/data/catalog
 Furniture Details (GET): http://localhost:3030/data/catalog/:id  !!!don't forget ID
 Update Furniture (PUT): http://localhost:3030/data/catalog/:id   !!!don't forget ID
 Delete Furniture (DELETE):  http://localhost:3030/data/catalog/:id !!!don't forget ID

@@ -2,10 +2,10 @@ import { postRegister } from "../data/data.js";
 import { setUserData } from "../data/util.js";
 import { html } from "../lib.js";
 
-let page = null;
+let ctx = null;
 
-export async function showRegister(ctx) {
-    page = ctx.page;
+export async function showRegister(onCtx) {
+    ctx = onCtx.page;
     ctx.render(registerTemplate);
     
 };
@@ -60,6 +60,6 @@ async function onSubmit(event) {
 
     if (response.accessToken) {
         setUserData(response);
-        page.redirect('/dashboard');
+        ctx.page.redirect('/');
     };
 };

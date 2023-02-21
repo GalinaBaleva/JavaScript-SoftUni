@@ -1,4 +1,4 @@
-import { getLogin } from '../data/data.js';
+import { postLogin } from '../data/data.js';
 import { setUserData } from '../data/util.js';
 import { html } from '../lib.js';
 
@@ -45,8 +45,8 @@ async function onSubmit(e) {
 
     const data = [...formData.entries()].reduce((acc, curent) => Object.assign(acc, { [curent[0]]: curent[1].trim() }), {});
 
-    const response = await getLogin(data);
+    const response = await postLogin(data);
     setUserData(response);
     
-    ctx.page.redirect('/dashboard');
+    ctx.page.redirect('/');
 };
