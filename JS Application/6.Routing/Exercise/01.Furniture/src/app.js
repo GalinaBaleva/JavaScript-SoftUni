@@ -5,6 +5,7 @@ import { render } from './lib.js';
 
 import { checkUserNav } from './views/auth.js';
 import { showDashboard } from './views/dashboard.js';
+import { showDetails } from './views/details.js';
 import { showLogin } from './views/login.js';
 import { showRegister } from './views/register.js';
 
@@ -27,5 +28,6 @@ page('/index.html', '/');
 page('/', showDashboard)
 page('/register', showRegister);
 page('/login', showLogin);
+page('/details*', showDetails);
 
 page.start();

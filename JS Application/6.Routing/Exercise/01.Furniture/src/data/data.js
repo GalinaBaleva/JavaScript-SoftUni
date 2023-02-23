@@ -5,8 +5,7 @@ const endPoints = {
     'login': '/users/login',
     'logout': '/users/logout',
     'catalog': '/data/catalog',
-    'details': '/data/catalog/'
-
+    'details': '/data/catalog'
 };
 
 
@@ -33,10 +32,15 @@ export async function getAllFurniture(){
     return result;
 };
 
+//Furniture Details (GET): http://localhost:3030/data/catalog/:id  !!!don't forget ID
+export async function getDetails(id){
+    const result = await get(endPoints.details + id);
+    return result;
+};
+
 /*
 
 Create Furniture (POST): http://localhost:3030/data/catalog
-Furniture Details (GET): http://localhost:3030/data/catalog/:id  !!!don't forget ID
 Update Furniture (PUT): http://localhost:3030/data/catalog/:id   !!!don't forget ID
 Delete Furniture (DELETE):  http://localhost:3030/data/catalog/:id !!!don't forget ID
 My Furniture (GET): http://localhost:3030/data/catalog?where=_ownerId%3D%22{userId}%22
