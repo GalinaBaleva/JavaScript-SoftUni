@@ -11,7 +11,7 @@ export function checkUserNav() {
                     <a id="catalogLink" href="/" class="active">Dashboard</a>
                     <div id="user">
                         <a id="createLink" href="create.html">Create Furniture</a>
-                        <a id="logoutBtn" href="javascript:void(0">Logout</a>
+                        <a id="logoutBtn" href="/logout">Logout</a>
                     </div>`;
     } else {
         user = html`

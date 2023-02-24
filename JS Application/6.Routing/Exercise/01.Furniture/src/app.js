@@ -29,5 +29,6 @@ page('/', showDashboard)
 page('/register', showRegister);
 page('/login', showLogin);
 page('/details*', showDetails);
+page('/logout', getLogout)
 
 page.start();

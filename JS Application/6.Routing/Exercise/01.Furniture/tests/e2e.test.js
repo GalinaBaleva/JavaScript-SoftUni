@@ -1,7 +1,7 @@
 const { chromium } = require('playwright-chromium');
 const { expect } = require('chai');
 
-const host = 'http://localhost:5500'; // Application host (NOT service host - that can be anything)
+const host = 'http://localhost:5501'; // Application host (NOT service host - that can be anything)
 
 const interval = 300;
 const timeout = 6000;
