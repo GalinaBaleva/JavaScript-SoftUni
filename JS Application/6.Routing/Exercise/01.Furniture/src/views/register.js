@@ -5,7 +5,7 @@ import { html } from "../lib.js";
 let ctx = null;
 
 export async function showRegister(onCtx) {
-    ctx = onCtx.page;
+    ctx = onCtx;
     ctx.render(registerTemplate);
     
 };

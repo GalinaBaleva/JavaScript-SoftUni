@@ -5,7 +5,8 @@ const endPoints = {
     'login': '/users/login',
     'logout': '/users/logout',
     'catalog': '/data/catalog',
-    'details': '/data/catalog'
+    'details': '/data/catalog',
+    'me': '/users/me'
 };
 
 
@@ -37,6 +38,11 @@ export async function getDetails(id){
     const result = await get(endPoints.details + id);
     return result;
 };
+
+export async function me(){
+    const result = await get(endPoints.me);
+    return result;
+}
 
 /*
 
