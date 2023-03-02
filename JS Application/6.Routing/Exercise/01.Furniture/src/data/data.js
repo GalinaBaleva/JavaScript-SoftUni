@@ -1,5 +1,5 @@
 import { removeUserData} from '../data/util.js'
-import { get, post } from "./api.js";
+import { del, get, post } from "./api.js";
 
 const endPoints = {
     'register': '/users/register',
@@ -9,6 +9,7 @@ const endPoints = {
     'me': '/users/me'
 };
 
+let ctx = null;
 
 //Register User (POST): http://localhost:3030/users/register
 export async function postRegister(data){
@@ -23,11 +24,10 @@ export async function postLogin(data){
 };
 
 //Logout User (GET): http://localhost:3030/users/logout
-export async function getLogout(ctx){
+export async function getLogout(onCtx){
     await get(endPoints.logout);
     removeUserData();
-    ctx.checkUserNav();
-    ctx.page('/');
+    onCtx.page.redirect('/');
 };
 
 //All Furniture (GET): http://localhost:3030/data/catalog
@@ -54,9 +54,13 @@ export async function createFurniture(body){
     return result;
 };
 
-/*
+//Delete Furniture (DELETE):  http://localhost:3030/data/catalog/:id !!!don't forget ID
 
+export  async function deleteFurniture(id){
+    const result = await del(endPoints.catalog + id);
+};
+
+/*
 Update Furniture (PUT): http://localhost:3030/data/catalog/:id   !!!don't forget ID
-Delete Furniture (DELETE):  http://localhost:3030/data/catalog/:id !!!don't forget ID
 My Furniture (GET): http://localhost:3030/data/catalog?where=_ownerId%3D%22{userId}%22
 */

@@ -15,7 +15,7 @@ const root = document.querySelector('.container');
 
 const token = sessionStorage.getItem('accessToken');
 if (token) {
-    document.getElementById('logoutBtn').addEventListener('click', getLogout);
+    document.getElementById('logoutBtn').addEventListener('click', getLogout.bind(null, decorationContnt));
 };
 
 function decorationContnt(ctx, next) {
@@ -25,10 +25,10 @@ function decorationContnt(ctx, next) {
 };
 page(decorationContnt);
 page('/index.html', '/');
-page('/', showDashboard)
+page('/', showDashboard);
 page('/register', showRegister);
 page('/login', showLogin);
 page('/details*', showDetails);
-page('/logout', getLogout)
+page('/logout', getLogout);
 
 page.start();

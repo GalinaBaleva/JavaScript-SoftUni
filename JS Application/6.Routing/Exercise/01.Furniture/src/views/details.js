@@ -43,13 +43,20 @@ async function checkIfOwner(data) {
     if (user._id === data._ownerId) {
         return html`
                     <div>
-                        <a href=”#” class="btn btn-info">Edit</a>
-                        <a href=”#” class="btn btn-red">Delete</a>
+                        <a href=”#” class="btn btn-info" click=${editCardContent}>Edit</a>
+                        <a href=”#” class="btn btn-red" click=${deleteCard}>Delete</a>
                     </div>`;
     } else {
         return '';
-    }
+    };
+};
 
 
+async function editCardContent(e){
+    console.log(e)
+};
+
+async function deleteCard(e){
+    console.log(e);
 };
 
