@@ -10,7 +10,7 @@ export function checkUserNav() {
         user = html`
                     <a id="catalogLink" href="/" class="active">Dashboard</a>
                     <div id="user">
-                        <a id="createLink" href="create.html">Create Furniture</a>
+                        <a id="createLink" href="/create">Create Furniture</a>
                         <a id="profileLink" href="my-furniture.html" >My Publications</a>
                         <a id="logoutBtn" href="/logout">Logout</a>
                     </div>`;

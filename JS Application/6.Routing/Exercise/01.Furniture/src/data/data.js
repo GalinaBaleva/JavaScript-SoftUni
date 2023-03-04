@@ -49,7 +49,7 @@ export async function me(){
 
 
 //Create Furniture (POST): http://localhost:3030/data/catalog
-export async function createFurniture(body){
+export async function creeatFurniture(body){
     const result = await post(endPoints.catalog, body);
     return result;
 };

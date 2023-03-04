@@ -13,7 +13,7 @@ export async function requester(method, url, data) {
 
     const token = sessionStorage.getItem('accessToken');
 
-    if (token && options.method == 'get' && (url == '/users/logout' || url == '/users/me')) { //
+    if ((token && options.method == 'get' && (url == '/users/logout' || url == '/users/me') || options.method !== 'get')) { //
         options.headers['X-Authorization'] = token;
     };
 

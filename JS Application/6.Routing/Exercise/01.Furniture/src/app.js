@@ -4,6 +4,7 @@ import { render } from './lib.js';
 
 
 import { checkUserNav } from './views/auth.js';
+import { showCreateFurniture } from './views/create.js';
 import { showDashboard } from './views/dashboard.js';
 import { showDetails } from './views/details.js';
 import { showLogin } from './views/login.js';
@@ -30,5 +31,7 @@ page('/register', showRegister);
 page('/login', showLogin);
 page('/details*', showDetails);
 page('/logout', getLogout);
+page('/create', showCreateFurniture);
+
 
 page.start();
