@@ -1,17 +1,30 @@
-import { getDetails, me } from "../data/data.js";
+import { delFurniture, getDetails, me } from "../data/data.js";
 import { html } from "../lib.js"
 
 
-export async function showDetails(ctx) {
+let ctx = null;
+
+export async function showDetails(onCtx) {
+    ctx = onCtx;
     const id = ctx.params[0];
     const data = await getDetails(id);
-    ctx.render(detailsTemplate(data))
+    ctx.render(await detailsTemplate(data));
 };
 
-function detailsTemplate(data) {
+async function detailsTemplate(data) {
     const img = data.img.slice(1);
-    const user = Object.values(checkIfOwner(data));
-    return html`
+
+    const user = await me();
+
+    let isUser = null;
+
+    if (user._id === data._ownerId) {
+        isUser = true;
+    } else {
+        isUser = false;
+    };
+
+    const result = html`
             <div class="row space-top">
                 <div class="col-md-12">
                     <h1>Furniture Details</h1>
@@ -32,31 +45,27 @@ function detailsTemplate(data) {
                     <p>Description: <span>${data.description}</span></p>
                     <p>Price: <span>${data.price}</span></p>
                     <p>Material: <span>${data.material}</span></p>
-                    ${user}
+                    <div>${isUser === true ? html`
+                        <a href=”#” class="btn btn-info" @click=${editCardContent}>Edit</a>
+                        <a href=”#” class="btn btn-red" data-id=${data._id} @click=${deleteFurniture}>Delete</a>` : ''}
+                    </div>
                 </div>
             </div>`;
+
+    return result;
 };
 
-async function checkIfOwner(data) {
-    const user = await me();
+function editCardContent(e) {
+    e.preventDefault();
+    
+};
 
-    if (user._id === data._ownerId) {
-        return html`
-                    <div>
-                        <a href=”#” class="btn btn-info" click=${editCardContent}>Edit</a>
-                        <a href=”#” class="btn btn-red" click=${deleteCard}>Delete</a>
-                    </div>`;
-    } else {
-        return '';
-    };
+function deleteFurniture(e){
+    e.preventDefault();
+    
+    delFurniture();
+    ctx.page.redirect('/');
 };
 
 
-async function editCardContent(e){
-    console.log(e)
-};
-
-async function deleteCard(e){
-    console.log(e);
-};
 

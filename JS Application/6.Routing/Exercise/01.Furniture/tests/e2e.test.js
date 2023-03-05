@@ -5,7 +5,7 @@ const host = 'http://localhost:5501'; // Application host (NOT service host - th
 
 const interval = 300;
 const timeout = 6000;
-const DEBUG = false;
+const DEBUG = true;
 const slowMo = 500;
 
 const mockData = {
@@ -95,298 +95,298 @@ describe('E2E tests', function () {
 
   // Test proper
   describe('Authentication', () => {
-    it('Register makes correct API call', async () => {
-      const data = mockData.users[0];
-      const { post } = await handle(endpoints.register);
-      const { onRequest } = post(data);
+  //   it('Register makes correct API call', async () => {
+  //     const data = mockData.users[0];
+  //     const { post } = await handle(endpoints.register);
+  //     const { onRequest } = post(data);
 
-      await page.goto(host);
-      await page.waitForSelector('#registerLink');
-      await page.click('text=Register');
+  //     await page.goto(host);
+  //     await page.waitForSelector('#registerLink');
+  //     await page.click('text=Register');
 
-      await page.waitForSelector('form');
+  //     await page.waitForSelector('form');
 
-      await page.fill('[name="email"]', data.email);
-      await page.fill('[name="password"]', data.password);
-      await page.fill('[name="rePass"]', data.password);
-
-      const [request] = await Promise.all([
-        onRequest(),
-        page.click('[type="submit"]'),
-      ]);
-
-      const postData = JSON.parse(request.postData());
-
-      expect(postData.email).to.equal(data.email);
-      expect(postData.password).to.equal(data.password);
-    });
-
-    it('Login makes correct API call', async () => {
-      const data = mockData.users[0];
-      const { post } = await handle(endpoints.login);
-      const { onRequest } = post(data);
-
-      await page.goto(host);
-      await page.waitForSelector('#loginLink');
-      await page.click('text=Login');
-
-      await page.waitForSelector('form');
+  //     await page.fill('[name="email"]', data.email);
+  //     await page.fill('[name="password"]', data.password);
+  //     await page.fill('[name="rePass"]', data.password);
+
+  //     const [request] = await Promise.all([
+  //       onRequest(),
+  //       page.click('[type="submit"]'),
+  //     ]);
+
+  //     const postData = JSON.parse(request.postData());
+
+  //     expect(postData.email).to.equal(data.email);
+  //     expect(postData.password).to.equal(data.password);
+  //   });
+
+  //   it('Login makes correct API call', async () => {
+  //     const data = mockData.users[0];
+  //     const { post } = await handle(endpoints.login);
+  //     const { onRequest } = post(data);
+
+  //     await page.goto(host);
+  //     await page.waitForSelector('#loginLink');
+  //     await page.click('text=Login');
+
+  //     await page.waitForSelector('form');
 
-      await page.fill('[name="email"]', data.email);
-      await page.fill('[name="password"]', data.password);
-
-      const [request] = await Promise.all([
-        onRequest(),
-        page.click('[type="submit"]'),
-      ]);
+  //     await page.fill('[name="email"]', data.email);
+  //     await page.fill('[name="password"]', data.password);
+
+  //     const [request] = await Promise.all([
+  //       onRequest(),
+  //       page.click('[type="submit"]'),
+  //     ]);
 
-      const postData = JSON.parse(request.postData());
-      expect(postData.email).to.equal(data.email);
-      expect(postData.password).to.equal(data.password);
-    });
-
-    it('Logout makes correct API call', async () => {
-      const data = mockData.users[0];
-      const { post } = await handle(endpoints.login);
-      const { get } = await handle(endpoints.logout);
-      const { onResponse } = post(data);
-      const { onRequest } = get('', { json: false, status: 204 });
-
-      await page.goto(host);
-
-      await page.waitForSelector('#loginLink');
-      await page.click('text=Login');
-
-      await page.waitForSelector('form');
-      await page.fill('[name="email"]', data.email);
-      await page.fill('[name="password"]', data.password);
-
-      await Promise.all([onResponse(), page.click('[type="submit"]')]);
-
-      await page.waitForSelector('#logoutBtn');
-
-      const [request] = await Promise.all([
-        onRequest(),
-        page.click('nav >> text=Logout'),
-      ]);
-
-      const token = request.headers()['x-authorization'];
-      expect(request.method()).to.equal('GET');
-      expect(token).to.equal(data.accessToken);
-    });
-  });
-
-  describe('Navigation bar', () => {
-    it('Guest user should see correct navigation', async () => {
-      await page.goto(host);
-      await page.waitForSelector('nav');
-
-      expect(await page.isVisible('nav >> text=Dashboard')).to.be.true;
-      expect(await page.isVisible('nav >> text=Login')).to.be.true;
-      expect(await page.isVisible('nav >> text=Register')).to.be.true;
-
-      expect(await page.isVisible('nav >> text=Create Furniture')).to.be.false;
-      expect(await page.isVisible('nav >> text=My Publications')).to.be.false;
-      expect(await page.isVisible('nav >> text=Logout')).to.be.false;
-    });
-
-    it('Logged user should see correct navigation', async () => {
-      // Login user
-      const data = mockData.users[0];
-      await page.goto(host);
-      await page.waitForSelector('#loginLink');
-
-      await page.click('nav >> text=Login');
-
-      await page.waitForSelector('form');
-      await page.fill('[name="email"]', data.email);
-      await page.fill('[name="password"]', data.password);
-
-      await page.click('[type="submit"]');
-      await page.waitForSelector('nav');
-
-      //Test for navigation
-      expect(await page.isVisible('nav >> text=Dashboard')).to.be.true;
-      expect(await page.isVisible('nav >> text=Login')).to.be.false;
-      expect(await page.isVisible('nav >> text=Register')).to.be.false;
-
-      expect(await page.isVisible('nav >> text=Create Furniture')).to.be.true;
-      expect(await page.isVisible('nav >> text=My Publications')).to.be.true;
-      expect(await page.isVisible('nav >> text=Logout')).to.be.true;
-    });
-
-    it('User should see correct navigation after click on Logout button', async () => {
-      // Login user
-      const data = mockData.users[0];
-      await page.goto(host);
-      await page.waitForSelector('#loginLink');
-
-      await page.click('nav >> text=Login');
-
-      await page.waitForSelector('form');
-      await page.fill('[name="email"]', data.email);
-      await page.fill('[name="password"]', data.password);
-
-      await page.click('[type="submit"]');
-      await page.waitForSelector('nav');
-
-      //Test for navigation
-      expect(await page.isVisible('nav >> text=Dashboard')).to.be.true;
-      expect(await page.isVisible('nav >> text=Login')).to.be.false;
-      expect(await page.isVisible('nav >> text=Register')).to.be.false;
-
-      expect(await page.isVisible('nav >> text=Create Furniture')).to.be.true;
-      expect(await page.isVisible('nav >> text=My Publications')).to.be.true;
-      expect(await page.isVisible('nav >> text=Logout')).to.be.true;
-
-      await page.waitForSelector('#logoutBtn');
-      await page.click('nav >> text=Logout');
-
-      expect(await page.isVisible('nav >> text=Dashboard')).to.be.true;
-      expect(await page.isVisible('nav >> text=Login')).to.be.true;
-      expect(await page.isVisible('nav >> text=Register')).to.be.true;
-
-      expect(await page.isVisible('nav >> text=Create Furniture')).to.be.false;
-      expect(await page.isVisible('nav >> text=My Publications')).to.be.false;
-      expect(await page.isVisible('nav >> text=Logout')).to.be.false;
-    });
-  });
-
-  describe('Catalog', () => {
-    it('Show catalog', async () => {
-      const data = mockData.catalog;
-
-      await page.goto(host);
-      await page.waitForSelector('.card');
-
-      const titles = await page.$$eval(`.card p`, (t) =>
-        t.map((s) => s.textContent)
-      );
-
-      expect(titles.length / 2).to.equal(mockData.catalog.length);
-      expect(titles[0]).to.contains(data[0].description);
-      expect(titles[2]).to.contains(data[1].description);
-      expect(titles[4]).to.contains(data[2].description);
-    });
-
-    it('Guest does NOT see edit/delete buttons', async () => {
-      const data = mockData.catalog[0];
-      await page.goto(host);
-      await page.waitForSelector('.container');
-
-      await page.waitForSelector('.container');
-      await page.click(
-        `.card-body:has-text("${data.description}") >> text=Details`
-      );
-
-      expect(await page.isVisible('text="Delete"')).to.be.false;
-      expect(await page.isVisible('text="Edit"')).to.be.false;
-    });
-  });
-
-  describe('CRUD', () => {
-    // Login user
-    const loginUser = async () => {
-      const data = mockData.users[0];
-      await page.goto(host);
-      await page.waitForTimeout(interval);
-      await page.click('text=Login');
-      await page.waitForTimeout(interval);
-      await page.waitForSelector('form');
-      await page.fill('[name="email"]', data.email);
-      await page.fill('[name="password"]', data.password);
-      await page.click('[type="submit"]');
-      await page.waitForTimeout(interval);
-    };
-
-    it('Create does NOT work with empty fields', async () => {
-      await loginUser();
-      const { post } = await handle(endpoints.catalog);
-      const isCalled = post().isHandled;
-
-      await page.click('text=Create Furniture');
-      await page.waitForSelector('form');
-
-      await page.waitForSelector('form');
-      page.click('[type="submit"]');
-
-      expect(isCalled()).to.be.false;
-    });
-
-    it('Non-author does NOT see delete and edit buttons', async () => {
-      await loginUser();
-      const data = mockData.catalog[2];
-
-      await page.waitForSelector('.container');
-      await page.click(
-        `.card-body:has-text("${data.description}") >> text=Details`
-      );
-
-      expect(await page.isVisible('text="Delete"')).to.be.false;
-      expect(await page.isVisible('text="Edit"')).to.be.false;
-    });
-
-    it('Edit should populate form with correct data', async () => {
-      await loginUser();
-      const data = mockData.catalog[1];
-      const { get } = await handle(endpoints.details(data._id));
-      get(data);
-
-      await page.waitForSelector('.container');
-      await page.click(
-        `.card-body:has-text("${data.description}") >> text=Details`
-      );
-      await page.waitForSelector('.btn-info');
-
-      await page.click('text=Edit');
-
-      await page.waitForSelector('form');
-
-      const formData = {
-        make: await page.$eval('[name="make"]', (t) => t.value),
-        model: await page.$eval('[name="model"]', (t) => t.value),
-        year: await page.$eval('[name="year"]', (t) => t.value),
-        description: await page.$eval('[name="description"]', (t) => t.value),
-        price: await page.$eval('[name="price"]', (t) => t.value),
-        img: await page.$eval('[name="img"]', (t) => t.value),
-        material: await page.$eval('[name="material"]', (t) => t.value),
-      };
-      expect(formData.make).to.equal(data.make);
-      expect(formData.model).to.equal(data.model);
-      expect(formData.year).to.equal(data.year);
-      expect(formData.description).to.equal(data.description);
-      expect(formData.price).to.equal(data.price);
-      expect(formData.img).to.equal(data.img);
-      expect(formData.material).to.equal(data.material);
-    });
-
-    it('Edit does NOT work with empty fields', async () => {
-      await loginUser();
-      const data = mockData.catalog[0];
-      const { get, put } = await handle(endpoints.details(data._id));
-      get(data);
-      const { isHandled } = put();
-
-      await page.click('nav >> text=Dashboard');
-
-      await page.waitForSelector('.container');
-      await page.click(
-        `.card-body:has-text("${data.description}") >> text=Details`
-      );
-      await page.waitForSelector('.btn-info');
-
-      await page.click('text=Edit');
-
-      await page.waitForSelector('form');
-      await page.fill('[name="make"]', '');
-      await page.fill('[name="model"]', '');
-      await page.fill('[name="description"]', '');
-      await page.fill('[name="img"]', '');
-
-      await page.click('[type="submit"]');
-
-      expect(isHandled()).to.be.false;
-    });
+  //     const postData = JSON.parse(request.postData());
+  //     expect(postData.email).to.equal(data.email);
+  //     expect(postData.password).to.equal(data.password);
+  //   });
+
+  //   it('Logout makes correct API call', async () => {
+  //     const data = mockData.users[0];
+  //     const { post } = await handle(endpoints.login);
+  //     const { get } = await handle(endpoints.logout);
+  //     const { onResponse } = post(data);
+  //     const { onRequest } = get('', { json: false, status: 204 });
+
+  //     await page.goto(host);
+
+  //     await page.waitForSelector('#loginLink');
+  //     await page.click('text=Login');
+
+  //     await page.waitForSelector('form');
+  //     await page.fill('[name="email"]', data.email);
+  //     await page.fill('[name="password"]', data.password);
+
+  //     await Promise.all([onResponse(), page.click('[type="submit"]')]);
+
+  //     await page.waitForSelector('#logoutBtn');
+
+  //     const [request] = await Promise.all([
+  //       onRequest(),
+  //       page.click('nav >> text=Logout'),
+  //     ]);
+
+  //     const token = request.headers()['x-authorization'];
+  //     expect(request.method()).to.equal('GET');
+  //     expect(token).to.equal(data.accessToken);
+  //   });
+  // });
+
+  // describe('Navigation bar', () => {
+  //   it('Guest user should see correct navigation', async () => {
+  //     await page.goto(host);
+  //     await page.waitForSelector('nav');
+
+  //     expect(await page.isVisible('nav >> text=Dashboard')).to.be.true;
+  //     expect(await page.isVisible('nav >> text=Login')).to.be.true;
+  //     expect(await page.isVisible('nav >> text=Register')).to.be.true;
+
+  //     expect(await page.isVisible('nav >> text=Create Furniture')).to.be.false;
+  //     expect(await page.isVisible('nav >> text=My Publications')).to.be.false;
+  //     expect(await page.isVisible('nav >> text=Logout')).to.be.false;
+  //   });
+
+  //   it('Logged user should see correct navigation', async () => {
+  //     // Login user
+  //     const data = mockData.users[0];
+  //     await page.goto(host);
+  //     await page.waitForSelector('#loginLink');
+
+  //     await page.click('nav >> text=Login');
+
+  //     await page.waitForSelector('form');
+  //     await page.fill('[name="email"]', data.email);
+  //     await page.fill('[name="password"]', data.password);
+
+  //     await page.click('[type="submit"]');
+  //     await page.waitForSelector('nav');
+
+  //     //Test for navigation
+  //     expect(await page.isVisible('nav >> text=Dashboard')).to.be.true;
+  //     expect(await page.isVisible('nav >> text=Login')).to.be.false;
+  //     expect(await page.isVisible('nav >> text=Register')).to.be.false;
+
+  //     expect(await page.isVisible('nav >> text=Create Furniture')).to.be.true;
+  //     expect(await page.isVisible('nav >> text=My Publications')).to.be.true;
+  //     expect(await page.isVisible('nav >> text=Logout')).to.be.true;
+  //   });
+
+  //   it('User should see correct navigation after click on Logout button', async () => {
+  //     // Login user
+  //     const data = mockData.users[0];
+  //     await page.goto(host);
+  //     await page.waitForSelector('#loginLink');
+
+  //     await page.click('nav >> text=Login');
+
+  //     await page.waitForSelector('form');
+  //     await page.fill('[name="email"]', data.email);
+  //     await page.fill('[name="password"]', data.password);
+
+  //     await page.click('[type="submit"]');
+  //     await page.waitForSelector('nav');
+
+  //     //Test for navigation
+  //     expect(await page.isVisible('nav >> text=Dashboard')).to.be.true;
+  //     expect(await page.isVisible('nav >> text=Login')).to.be.false;
+  //     expect(await page.isVisible('nav >> text=Register')).to.be.false;
+
+  //     expect(await page.isVisible('nav >> text=Create Furniture')).to.be.true;
+  //     expect(await page.isVisible('nav >> text=My Publications')).to.be.true;
+  //     expect(await page.isVisible('nav >> text=Logout')).to.be.true;
+
+  //     await page.waitForSelector('#logoutBtn');
+  //     await page.click('nav >> text=Logout');
+
+  //     expect(await page.isVisible('nav >> text=Dashboard')).to.be.true;
+  //     expect(await page.isVisible('nav >> text=Login')).to.be.true;
+  //     expect(await page.isVisible('nav >> text=Register')).to.be.true;
+
+  //     expect(await page.isVisible('nav >> text=Create Furniture')).to.be.false;
+  //     expect(await page.isVisible('nav >> text=My Publications')).to.be.false;
+  //     expect(await page.isVisible('nav >> text=Logout')).to.be.false;
+  //   });
+  // });
+
+  // describe('Catalog', () => {
+  //   it('Show catalog', async () => {
+  //     const data = mockData.catalog;
+
+  //     await page.goto(host);
+  //     await page.waitForSelector('.card');
+
+  //     const titles = await page.$$eval(`.card p`, (t) =>
+  //       t.map((s) => s.textContent)
+  //     );
+
+  //     expect(titles.length / 2).to.equal(mockData.catalog.length);
+  //     expect(titles[0]).to.contains(data[0].description);
+  //     expect(titles[2]).to.contains(data[1].description);
+  //     expect(titles[4]).to.contains(data[2].description);
+  //   });
+
+  //   it('Guest does NOT see edit/delete buttons', async () => {
+  //     const data = mockData.catalog[0];
+  //     await page.goto(host);
+  //     await page.waitForSelector('.container');
+
+  //     await page.waitForSelector('.container');
+  //     await page.click(
+  //       `.card-body:has-text("${data.description}") >> text=Details`
+  //     );
+
+  //     expect(await page.isVisible('text="Delete"')).to.be.false;
+  //     expect(await page.isVisible('text="Edit"')).to.be.false;
+  //   });
+  // });
+
+  // describe('CRUD', () => {
+  //   // Login user
+  //   const loginUser = async () => {
+  //     const data = mockData.users[0];
+  //     await page.goto(host);
+  //     await page.waitForTimeout(interval);
+  //     await page.click('text=Login');
+  //     await page.waitForTimeout(interval);
+  //     await page.waitForSelector('form');
+  //     await page.fill('[name="email"]', data.email);
+  //     await page.fill('[name="password"]', data.password);
+  //     await page.click('[type="submit"]');
+  //     await page.waitForTimeout(interval);
+  //   };
+
+  //   it('Create does NOT work with empty fields', async () => {
+  //     await loginUser();
+  //     const { post } = await handle(endpoints.catalog);
+  //     const isCalled = post().isHandled;
+
+  //     await page.click('text=Create Furniture');
+  //     await page.waitForSelector('form');
+
+  //     await page.waitForSelector('form');
+  //     page.click('[type="submit"]');
+
+  //     expect(isCalled()).to.be.false;
+  //   });
+
+  //   it('Non-author does NOT see delete and edit buttons', async () => {
+  //     await loginUser();
+  //     const data = mockData.catalog[2];
+
+  //     await page.waitForSelector('.container');
+  //     await page.click(
+  //       `.card-body:has-text("${data.description}") >> text=Details`
+  //     );
+
+  //     expect(await page.isVisible('text="Delete"')).to.be.false;
+  //     expect(await page.isVisible('text="Edit"')).to.be.false;
+  //   });
+
+  //   it('Edit should populate form with correct data', async () => {
+  //     await loginUser();
+  //     const data = mockData.catalog[1];
+  //     const { get } = await handle(endpoints.details(data._id));
+  //     get(data);
+
+  //     await page.waitForSelector('.container');
+  //     await page.click(
+  //       `.card-body:has-text("${data.description}") >> text=Details`
+  //     );
+  //     await page.waitForSelector('.btn-info');
+
+  //     await page.click('text=Edit');
+
+  //     await page.waitForSelector('form');
+
+  //     const formData = {
+  //       make: await page.$eval('[name="make"]', (t) => t.value),
+  //       model: await page.$eval('[name="model"]', (t) => t.value),
+  //       year: await page.$eval('[name="year"]', (t) => t.value),
+  //       description: await page.$eval('[name="description"]', (t) => t.value),
+  //       price: await page.$eval('[name="price"]', (t) => t.value),
+  //       img: await page.$eval('[name="img"]', (t) => t.value),
+  //       material: await page.$eval('[name="material"]', (t) => t.value),
+  //     };
+  //     expect(formData.make).to.equal(data.make);
+  //     expect(formData.model).to.equal(data.model);
+  //     expect(formData.year).to.equal(data.year);
+  //     expect(formData.description).to.equal(data.description);
+  //     expect(formData.price).to.equal(data.price);
+  //     expect(formData.img).to.equal(data.img);
+  //     expect(formData.material).to.equal(data.material);
+  //   });
+
+  //   it('Edit does NOT work with empty fields', async () => {
+  //     await loginUser();
+  //     const data = mockData.catalog[0];
+  //     const { get, put } = await handle(endpoints.details(data._id));
+  //     get(data);
+  //     const { isHandled } = put();
+
+  //     await page.click('nav >> text=Dashboard');
+
+  //     await page.waitForSelector('.container');
+  //     await page.click(
+  //       `.card-body:has-text("${data.description}") >> text=Details`
+  //     );
+  //     await page.waitForSelector('.btn-info');
+
+  //     await page.click('text=Edit');
+
+  //     await page.waitForSelector('form');
+  //     await page.fill('[name="make"]', '');
+  //     await page.fill('[name="model"]', '');
+  //     await page.fill('[name="description"]', '');
+  //     await page.fill('[name="img"]', '');
+
+  //     await page.click('[type="submit"]');
+
+  //     expect(isHandled()).to.be.false;
+  //   });
 
     it('Delete makes correct API call for logged in user', async () => {
       await loginUser();

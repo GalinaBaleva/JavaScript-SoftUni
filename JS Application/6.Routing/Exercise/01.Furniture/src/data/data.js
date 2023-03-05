@@ -6,6 +6,7 @@ const endPoints = {
     'login': '/users/login',
     'logout': '/users/logout',
     'catalog': '/data/catalog',
+    'details': '/data/catalog/',
     'me': '/users/me'
 };
 
@@ -38,7 +39,7 @@ export async function getAllFurniture(){
 
 //Furniture Details (GET): http://localhost:3030/data/catalog/:id  !!!don't forget ID
 export async function getDetails(id){
-    const result = await get(endPoints.catalog + id);
+    const result = await get(endPoints.details + id);
     return result;
 };
 
@@ -56,8 +57,8 @@ export async function creeatFurniture(body){
 
 //Delete Furniture (DELETE):  http://localhost:3030/data/catalog/:id !!!don't forget ID
 
-export  async function deleteFurniture(id){
-    const result = await del(endPoints.catalog + id);
+export async function delFurniture(id){
+    const result = await del(endPoints.details + id);
 };
 
 /*

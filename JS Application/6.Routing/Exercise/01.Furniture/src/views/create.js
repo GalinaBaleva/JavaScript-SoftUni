@@ -2,7 +2,10 @@
 import { creeatFurniture } from '../data/data.js';
 import { html } from '../lib.js'
 
-export function showCreateFurniture(ctx) {
+let ctx = null;
+
+export function showCreateFurniture(onCtx) {
+    ctx = onCtx;
     ctx.render(createFormTemplate());
 
 
@@ -58,7 +61,7 @@ function createFormTemplate(){
 async function onSubmit(e){
     e.preventDefault();
     const formData = new FormData(e.target);
-    console.log(formData)
+    console.log(formData);
 
     const emptiField = [...formData.values()].some(x => x == '');
     
@@ -72,4 +75,7 @@ async function onSubmit(e){
 
     const body = [...formData.entries()].reduce((acc, cur) => Object.assign(acc, {[cur[0]]: cur[1]}), {});
     creeatFurniture(body);
+    e.target.reset();
+    ctx.page.redirect('/');
+
 }
