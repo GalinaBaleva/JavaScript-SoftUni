@@ -326,67 +326,67 @@ describe('E2E tests', function () {
   //     expect(await page.isVisible('text="Edit"')).to.be.false;
   //   });
 
-  //   it('Edit should populate form with correct data', async () => {
-  //     await loginUser();
-  //     const data = mockData.catalog[1];
-  //     const { get } = await handle(endpoints.details(data._id));
-  //     get(data);
+    it('Edit should populate form with correct data', async () => {
+      await loginUser();
+      const data = mockData.catalog[1];
+      const { get } = await handle(endpoints.details(data._id));
+      get(data);
 
-  //     await page.waitForSelector('.container');
-  //     await page.click(
-  //       `.card-body:has-text("${data.description}") >> text=Details`
-  //     );
-  //     await page.waitForSelector('.btn-info');
+      await page.waitForSelector('.container');
+      await page.click(
+        `.card-body:has-text("${data.description}") >> text=Details`
+      );
+      await page.waitForSelector('.btn-info');
 
-  //     await page.click('text=Edit');
+      await page.click('text=Edit');
 
-  //     await page.waitForSelector('form');
+      await page.waitForSelector('form');
 
-  //     const formData = {
-  //       make: await page.$eval('[name="make"]', (t) => t.value),
-  //       model: await page.$eval('[name="model"]', (t) => t.value),
-  //       year: await page.$eval('[name="year"]', (t) => t.value),
-  //       description: await page.$eval('[name="description"]', (t) => t.value),
-  //       price: await page.$eval('[name="price"]', (t) => t.value),
-  //       img: await page.$eval('[name="img"]', (t) => t.value),
-  //       material: await page.$eval('[name="material"]', (t) => t.value),
-  //     };
-  //     expect(formData.make).to.equal(data.make);
-  //     expect(formData.model).to.equal(data.model);
-  //     expect(formData.year).to.equal(data.year);
-  //     expect(formData.description).to.equal(data.description);
-  //     expect(formData.price).to.equal(data.price);
-  //     expect(formData.img).to.equal(data.img);
-  //     expect(formData.material).to.equal(data.material);
-  //   });
+      const formData = {
+        make: await page.$eval('[name="make"]', (t) => t.value),
+        model: await page.$eval('[name="model"]', (t) => t.value),
+        year: await page.$eval('[name="year"]', (t) => t.value),
+        description: await page.$eval('[name="description"]', (t) => t.value),
+        price: await page.$eval('[name="price"]', (t) => t.value),
+        img: await page.$eval('[name="img"]', (t) => t.value),
+        material: await page.$eval('[name="material"]', (t) => t.value),
+      };
+      expect(formData.make).to.equal(data.make);
+      expect(formData.model).to.equal(data.model);
+      expect(formData.year).to.equal(data.year);
+      expect(formData.description).to.equal(data.description);
+      expect(formData.price).to.equal(data.price);
+      expect(formData.img).to.equal(data.img);
+      expect(formData.material).to.equal(data.material);
+    });
 
-  //   it('Edit does NOT work with empty fields', async () => {
-  //     await loginUser();
-  //     const data = mockData.catalog[0];
-  //     const { get, put } = await handle(endpoints.details(data._id));
-  //     get(data);
-  //     const { isHandled } = put();
+    it('Edit does NOT work with empty fields', async () => {
+      await loginUser();
+      const data = mockData.catalog[0];
+      const { get, put } = await handle(endpoints.details(data._id));
+      get(data);
+      const { isHandled } = put();
 
-  //     await page.click('nav >> text=Dashboard');
+      await page.click('nav >> text=Dashboard');
 
-  //     await page.waitForSelector('.container');
-  //     await page.click(
-  //       `.card-body:has-text("${data.description}") >> text=Details`
-  //     );
-  //     await page.waitForSelector('.btn-info');
+      await page.waitForSelector('.container');
+      await page.click(
+        `.card-body:has-text("${data.description}") >> text=Details`
+      );
+      await page.waitForSelector('.btn-info');
 
-  //     await page.click('text=Edit');
+      await page.click('text=Edit');
 
-  //     await page.waitForSelector('form');
-  //     await page.fill('[name="make"]', '');
-  //     await page.fill('[name="model"]', '');
-  //     await page.fill('[name="description"]', '');
-  //     await page.fill('[name="img"]', '');
+      await page.waitForSelector('form');
+      await page.fill('[name="make"]', '');
+      await page.fill('[name="model"]', '');
+      await page.fill('[name="description"]', '');
+      await page.fill('[name="img"]', '');
 
-  //     await page.click('[type="submit"]');
+      await page.click('[type="submit"]');
 
-  //     expect(isHandled()).to.be.false;
-  //   });
+      expect(isHandled()).to.be.false;
+    });
 
     it('Delete makes correct API call for logged in user', async () => {
       await loginUser();

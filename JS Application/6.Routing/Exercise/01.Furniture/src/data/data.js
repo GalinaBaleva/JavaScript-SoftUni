@@ -61,6 +61,11 @@ export async function delFurniture(id){
     const result = await del(endPoints.details + id);
 };
 
+export async function updateFurniture(id){
+   const result = await get(endPoints.details + id);
+   return result;
+};
+
 /*
 Update Furniture (PUT): http://localhost:3030/data/catalog/:id   !!!don't forget ID
 My Furniture (GET): http://localhost:3030/data/catalog?where=_ownerId%3D%22{userId}%22

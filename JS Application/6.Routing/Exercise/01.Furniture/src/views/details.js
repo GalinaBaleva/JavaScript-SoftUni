@@ -1,6 +1,6 @@
-import { delFurniture, getDetails, me } from "../data/data.js";
-import { html } from "../lib.js"
-
+import { delFurniture, getDetails, me, updateFurniture} from "../data/data.js";
+import { html } from "../lib.js";
+import { editViewTemplate } from "./edit.js";
 
 let ctx = null;
 
@@ -46,7 +46,7 @@ async function detailsTemplate(data) {
                     <p>Price: <span>${data.price}</span></p>
                     <p>Material: <span>${data.material}</span></p>
                     <div>${isUser === true ? html`
-                        <a href=”#” class="btn btn-info" @click=${editCardContent}>Edit</a>
+                        <a href=”#” class="btn btn-info" data-id=${data._id} @click=${editCardContent}>Edit</a>
                         <a href=”#” class="btn btn-red" data-id=${data._id} @click=${deleteFurniture}>Delete</a>` : ''}
                     </div>
                 </div>
@@ -55,17 +55,17 @@ async function detailsTemplate(data) {
     return result;
 };
 
-function editCardContent(e) {
+export async function editCardContent(e) {
     e.preventDefault();
-    
+    const id = e.target.dataset.id;
+    const data = await updateFurniture(id);
+
+   ctx.render(editViewTemplate(ctx, data))
 };
 
 function deleteFurniture(e){
     e.preventDefault();
-    
-    delFurniture();
+    const id = e.target.dataset.id;
+    delFurniture(id);
     ctx.page.redirect('/');
 };
-
-
-
