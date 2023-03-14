@@ -23,10 +23,10 @@ const catalogTmplate = (recipes, page, pages, search, onSubmit) => html`
 const recipeCardTemplate = (recipe) => html`
 <li><a href=${'/recipes/' + recipe._id}>${recipe.name}</a></li>`;
 
-function composeUrl (page, search){
+function composeUrl(page, search) {
     let url = `?page=${page}`;
 
-    if(search){
+    if (search) {
         url += '&search=' + search;
     };
 
@@ -44,7 +44,7 @@ export async function showCatalog(ctx) {
 
     ctx.render(catalogTmplate(recipes, page, pages, search, createSubmitHandler(onSubmit)));
 
-    function onSubmit(data, form){
+    function onSubmit(data, form) {
         ctx.page.redirect('/recipes?=' + data.search);
     };
 

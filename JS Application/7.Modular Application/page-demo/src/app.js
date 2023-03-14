@@ -10,15 +10,16 @@ import { showHome } from './views/home.js';
 import { showDetails } from './views/details.js';
 import { showLogin } from './views/login.js';
 import { getUserData } from './data/util.js';
+import { showRegister } from './views/register.js';
 
-const navTamplate = (user) = html`
+const navTamplate = (user) => html`
         <a href="/">Home</a>
         <a href="/recipes">Catalog</a>
         ${user ? html`<a href="/create">Create</a>` : nothing}
         <a href="/about">About</a>
         ${user ? html`<span>Welcome, ${user.username}</span>` : html`
         <a href="/login">Login</a>
-        <a href="/login">Login</a>`}
+        <a href="/register">Register</a>`}
         `;
 
 function decorateContent(ctx, next) {
@@ -64,6 +65,7 @@ page('/recipes/:id', showDetails);
 page('/about', showAbout);
 page('/contact*', showContact);
 page('/login', showLogin);
+page('/register', showRegister)
 page('*', notFound);
 
 
