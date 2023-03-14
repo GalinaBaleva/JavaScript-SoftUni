@@ -1,26 +1,51 @@
 import { html, nothing } from "../../node_modules/lit-html/lit-html.js";
 import { repeat } from '../../node_modules/lit-html/directives/repeat.js';
 import { getAll } from "../data/recipes.js";
+import { createSubmitHandler } from "../data/util.js";
 
-const catalogTmplate = (recipes, page, pages) => html`
+const catalogTmplate = (recipes, page, pages, search, onSubmit) => html`
 <h2>Catalog</h2>
 <div>
-    ${page > 1 ? html`<a href=${`?page=${page - 1}`}>&lt; Prev</a>` : nothing}
+    <form @submit=${onSubmit}>
+        <input name="search" type="text" .value=${search}>
+        <button>Search</button>
+    </form>
+</div>
+<div>
+    ${page > 1 ? html`<a href=${composeUrl(page - 1, search)}>&lt; Prev</a>` : nothing}
     <span>Page ${page} / ${pages}</span>
-    ${page < pages ? html`<a href=${`?page=${page + 1}`}>Next &gt;</a>` : nothing}
+    ${page < pages ? html`<a href=${composeUrl(page + 1, search)}>Next &gt;</a>` : nothing}
 </div>
 <ul>
     ${repeat(recipes, r => r._id, recipeCardTemplate)}
 </ul>`;
 
 const recipeCardTemplate = (recipe) => html`
-<li><a href=${'/recipes/' + recipe._id}>${recipe.name}</a></li>`
+<li><a href=${'/recipes/' + recipe._id}>${recipe.name}</a></li>`;
+
+function composeUrl (page, search){
+    let url = `?page=${page}`;
+
+    if(search){
+        url += '&search=' + search;
+    };
+
+    return url;
+}
 
 export async function showCatalog(ctx) {
+    console.log(ctx.user);
+
     const page = Number(ctx.query.page) || 1;
+    const search = ctx.query.search || '';
 
     ctx.render(html`<p>Loding &hellip;</p>`)
-    const { data: recipes, pages: pages } = await getAll(page);
+    const { data: recipes, pages: pages } = await getAll(page, search);
 
-    ctx.render(catalogTmplate(recipes, page, pages));
+    ctx.render(catalogTmplate(recipes, page, pages, search, createSubmitHandler(onSubmit)));
+
+    function onSubmit(data, form){
+        ctx.page.redirect('/recipes?=' + data.search);
+    };
+
 };
