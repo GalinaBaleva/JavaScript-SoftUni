@@ -1,11 +1,16 @@
-import { html, until } from "../lib.js";
+import { html, nothing, until } from "../lib.js";
 import { getById } from "../data/recipes.js";
+import { getLikesByRecipeId } from "./liks.js";
 
 const asyncTemplate = (recipePromise) => html`
 ${until(recipePromise, recipeSkeleton())}`;
 
-const detailsTemplate = (recipe) => html`
+const detailsTemplate = (recipe, likes, canLike) => html`
 <h2>${recipe.name}</h2>
+<div>
+${canLike ? html`<a href='javascript:void(0)'>Like</a>` : nothing}
+${likes} like${likes == 1 ? '' : 's'}
+</div>
 <img src=${'/' + recipe.img}>
 <h3>Ingredients</h3>
 <ul>
@@ -29,10 +34,19 @@ const recipeSkeleton = () => html`
 
 export function showDetails(ctx) {
     const id = ctx.params.id;
-    ctx.render(until(loadRecipe(id), asyncTemplate()))
+    const user = ctx.user;
+    let userId;
+
+    if(user){
+        userId = user._id;
+    }
+
+    ctx.render(until(loadRecipe(id, userId), asyncTemplate()))
 };
 
-async function loadRecipe(id) {
+async function loadRecipe(id, userId) {
+    const { likes , canLike } = await getLikesByRecipeId(id, userId);
+
     const recipe = await getById(id);
-    return detailsTemplate(recipe);
+    return detailsTemplate(recipe, likes, canLike);
 };

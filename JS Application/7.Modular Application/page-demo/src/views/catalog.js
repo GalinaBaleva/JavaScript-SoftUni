@@ -34,7 +34,6 @@ function composeUrl(page, search) {
 }
 
 export async function showCatalog(ctx) {
-    console.log(ctx.user);
 
     const page = Number(ctx.query.page) || 1;
     const search = ctx.query.search || '';
@@ -45,7 +44,7 @@ export async function showCatalog(ctx) {
     ctx.render(catalogTmplate(recipes, page, pages, search, createSubmitHandler(onSubmit)));
 
     function onSubmit(data, form) {
-        ctx.page.redirect('/recipes?=' + data.search);
+        ctx.page.redirect('/recipes?search=' + data.search);
     };
 
 };

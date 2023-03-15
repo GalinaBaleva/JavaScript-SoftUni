@@ -11,16 +11,22 @@ import { showDetails } from './views/details.js';
 import { showLogin } from './views/login.js';
 import { getUserData } from './data/util.js';
 import { showRegister } from './views/register.js';
+import { logout } from './views/auth.js';
 
 const navTamplate = (user) => html`
         <a href="/">Home</a>
         <a href="/recipes">Catalog</a>
         ${user ? html`<a href="/create">Create</a>` : nothing}
         <a href="/about">About</a>
-        ${user ? html`<span>Welcome, ${user.username}</span>` : html`
+        ${user ? html`<span>Welcome, ${user.username}</span><a href='/logout'>Logout</a>` : html`
         <a href="/login">Login</a>
         <a href="/register">Register</a>`}
         `;
+
+function onLogout (ctx){
+    logout();
+    ctx.page.redirect('/');
+}
 
 function decorateContent(ctx, next) {
     render(navTamplate(ctx.user), document.querySelector('nav'));
@@ -65,7 +71,8 @@ page('/recipes/:id', showDetails);
 page('/about', showAbout);
 page('/contact*', showContact);
 page('/login', showLogin);
-page('/register', showRegister)
+page('/register', showRegister);
+page('/logout', onLogout);
 page('*', notFound);
 
 
