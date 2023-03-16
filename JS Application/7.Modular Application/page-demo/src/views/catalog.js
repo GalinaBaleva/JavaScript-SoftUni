@@ -1,9 +1,10 @@
-import { html, nothing } from "../../node_modules/lit-html/lit-html.js";
+import { html, nothing } from '../../node_modules/lit-html/lit-html.js';
 import { repeat } from '../../node_modules/lit-html/directives/repeat.js';
-import { getAll } from "../data/recipes.js";
-import { createSubmitHandler } from "../data/util.js";
+import { getAll } from '../data/recipes.js';
+import { createSubmitHandler } from '../util.js';
 
-const catalogTmplate = (recipes, page, pages, search, onSubmit) => html`
+
+const catalogTemplate = (recipes, page, pages, search, onSubmit) => html`
 <h2>Catalog</h2>
 <div>
     <form @submit=${onSubmit}>
@@ -23,28 +24,28 @@ const catalogTmplate = (recipes, page, pages, search, onSubmit) => html`
 const recipeCardTemplate = (recipe) => html`
 <li><a href=${'/recipes/' + recipe._id}>${recipe.name}</a></li>`;
 
+
 function composeUrl(page, search) {
     let url = `?page=${page}`;
-
     if (search) {
         url += '&search=' + search;
-    };
-
+    }
     return url;
 }
 
-export async function showCatalog(ctx) {
 
+export async function showCatalog(ctx) {
+    console.log(ctx.user);
     const page = Number(ctx.query.page) || 1;
     const search = ctx.query.search || '';
 
-    ctx.render(html`<p>Loding &hellip;</p>`)
-    const { data: recipes, pages: pages } = await getAll(page, search);
+    ctx.render(html`<p>Loading &hellip;</p>`);
+    const { data: recipes, pages } = await getAll(page, search);
 
-    ctx.render(catalogTmplate(recipes, page, pages, search, createSubmitHandler(onSubmit)));
+    ctx.render(catalogTemplate(recipes, page, pages, search, createSubmitHandler(onSubmit)));
 
     function onSubmit(data, form) {
         ctx.page.redirect('/recipes?search=' + data.search);
-    };
+    }
+}
 
-};

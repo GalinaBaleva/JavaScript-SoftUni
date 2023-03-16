@@ -1,8 +1,9 @@
-import { html } from "../../node_modules/lit-html/lit-html.js";
+import { html } from '../../node_modules/lit-html/lit-html.js';
 
-const createTmplate = () => html`
-<h2>Create</h2>`
+
+const createTemplate = () => html`
+<h2>Create Product</h2>`;
 
 export function showCreate(ctx) {
-    ctx.render(createTmplate());
+    ctx.render(createTemplate());
 }
