@@ -1,4 +1,4 @@
-import { del, get } from "./api.js";
+import { del, get, post, put } from "./api.js";
 
 
 export async function getAll(){
@@ -11,4 +11,12 @@ export async function getById(id){
 
 export async function deleteById(id){
     return del('/data/pets/' + id);
+};
+
+export async function createPet(petData){
+    return post('/data/pets/', petData);
+};
+
+export async function editPet(id, petData){
+    return await put('/data/pets/' + id, petData);
 };

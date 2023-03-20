@@ -1,7 +1,9 @@
 import { page, render } from './lib.js';
 import { getUserData } from './util.js';
 import { showCatalog } from './views/catalog.js';
+import { showCreate } from './views/create.js';
 import { showDetail } from './views/details.js';
+import { showEdit } from './views/edit.js';
 import { showHome } from './views/home.js';
 import { showLogin } from './views/login.js';
 import { updataNav } from './views/nav.js';
@@ -13,8 +15,8 @@ page(decotarionContetx);
 page('/', showHome);
 page('/catalog', showCatalog);
 page('/catalog/:id', showDetail);
-page('/edit/:id', () => console.log('edit'));
-page('/create', () => console.log('create'));
+page('/edit/:id', showEdit);
+page('/create', showCreate);
 page('/login', showLogin);
 page('/register', showRegister);
 

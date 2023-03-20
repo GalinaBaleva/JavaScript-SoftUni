@@ -18,6 +18,6 @@ export function createSubmitHandler(callback){
         const formData = new  FormData(event.target);
         const data = Object.fromEntries(formData);
 
-        callback(data);
+        callback(data, event.target); // event.target if we want to reset the formData
     };
 };
