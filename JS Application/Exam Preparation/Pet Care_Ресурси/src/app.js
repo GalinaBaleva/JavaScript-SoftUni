@@ -11,7 +11,7 @@ import { showRegister } from './views/register.js';
 
 const main = document.getElementById('content');
 
-page(decotarionContetx);
+page(decorationContext);
 page('/', showHome);
 page('/catalog', showCatalog);
 page('/catalog/:id', showDetail);
@@ -23,7 +23,7 @@ page('/register', showRegister);
 updataNav();
 page.start();
 
-function decotarionContetx(ctx, next){
+function decorationContext(ctx, next){
     ctx.render = renderMain;
     ctx.updataNav = updataNav;
 
