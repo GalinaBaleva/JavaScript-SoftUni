@@ -1,5 +1,6 @@
 export function getUserData() {
     const data = JSON.parse(sessionStorage.getItem('userData'));
+    return data;
 };
 
 export function setUserData(data) {
@@ -11,11 +12,12 @@ export function clearUserData() {
 };
 
 
-export function createSubmitHandler(callback){
-    return function(event){
+export function createSubmitHandler(callback) {
+    return function (event) {
         event.preventDefault();
-        const formData = new  FormData(event.target);
+        const formData = new FormData(event.target);
         const data = Object.fromEntries(formData);
+        
 
         callback(data, event.target); // event.target if we want to reset the formData
     };

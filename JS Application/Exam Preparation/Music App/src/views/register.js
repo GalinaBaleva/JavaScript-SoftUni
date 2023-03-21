@@ -1,95 +1,54 @@
-// import { register } from "../api/user.js";
-// import { html } from "../lib.js";
-// import { createSubmitHandler } from "../util.js";
-
-// const registerTemplate = (onRegister) => html`        
-// <section  id="registerPage">
-//     <form @submit=${onRegister}>
-//         <fieldset>
-//             <legend>Register</legend>
-
-//             <label for="email" class="vhide">Email</label>
-//             <input id="email" class="email" name="email" type="text" placeholder="Email">
-
-//             <label for="password" class="vhide">Password</label>
-//             <input id="password" class="password" name="password" type="password" placeholder="Password">
-
-//             <label for="conf-pass" class="vhide">Confirm Password:</label>
-//             <input id="conf-pass" class="conf-pass" name="conf-pass" type="password" placeholder="Confirm Password">
-
-//             <button type="submit" class="register">Register</button>
-
-//             <p class="field">
-//                 <span>If you already have profile click <a href="#">here</a></span>
-//             </p>
-//         </fieldset>
-//     </form>
-// </section>`;
-
-
-// export async function showRegister(ctx) {
-//     ctx.render(registerTemplate(createSubmitHandler(onRegister)));
-
-//     async function onRegister({ email, password, repeatPassword }) {
-//         if (email == '' || password == '') {
-//             return alert('All field are required!');
-//         };
-
-//         if(password != repeatPassword){
-//             return alert('Password don\'t match!');
-//         };
-
-//         await register(email, password);
-//         ctx.updataNav();
-//         ctx.page.redirect('/');
-//     };
-// };
-
-import { html } from "../lib.js";
 import { register } from "../api/user.js";
+import { html } from "../lib.js";
 import { createSubmitHandler } from "../util.js";
 
 const registerTemplate = (onRegister) => html`        
-<section @submit=${onRegister} id="registerPage">
-    <form class="registerForm">
-        <img src="./images/logo.png" alt="logo" />
-        <h2>Register</h2>
-        <div class="on-dark">
-            <label for="email">Email:</label>
-            <input id="email" name="email" type="text" placeholder="steven@abv.bg" value="">
-        </div>
+<section id="registerPage">
+    <form @submit=${onRegister}>
+        <fieldset>
+            <legend>Register</legend>
 
-        <div class="on-dark">
-            <label for="password">Password:</label>
-            <input id="password" name="password" type="password" placeholder="********" value="">
-        </div>
+            <label for="email" class="vhide">Email</label>
+            <input id="email" class="email" name="email" type="text" placeholder="Email">
 
-        <div class="on-dark">
-            <label for="repeatPassword">Repeat Password:</label>
-            <input id="repeatPassword" name="repeatPassword" type="password" placeholder="********" value="">
-        </div>
+            <label for="password" class="vhide">Password</label>
+            <input id="password" class="password" name="password" type="password" placeholder="Password">
 
-        <button class="btn" type="submit">Register</button>
+            <label for="conf-pass" class="vhide">Confirm Password:</label>
+            <input id="conf-pass" class="conf-pass" name="conf-pass" type="password" placeholder="Confirm Password">
 
-        <p class="field">
-            <span>If you have profile click <a href="/login">here</a></span>
-        </p>
+            <button type="submit" class="register">Register</button>
+
+            <p class="field">
+                <span>If you already have profile click <a href="/login">here</a></span>
+            </p>
+        </fieldset>
     </form>
 </section>`;
+
 
 export async function showRegister(ctx) {
     ctx.render(registerTemplate(createSubmitHandler(onRegister)));
 
-    async function onRegister({ email, password, repeatPassword }) {
-        if (email == '' || password == '') {
+    async function onRegister(data) {
+        const dataValues = Object.values(data);
+        const result =
+        {
+            email: dataValues[0],
+            password: dataValues[1],
+            repass: dataValues[2]
+        };
+
+        if (result.email == '' || result.password == '') {
             return alert('All field are required!');
         };
 
-        if(password != repeatPassword){
+        if (result.password != result.repass) {
             return alert('Password don\'t match!');
         };
 
-        await register(email, password);
+        await register(result.email, result.password);
+        ctx.updataNav();
         ctx.page.redirect('/');
     };
 };
