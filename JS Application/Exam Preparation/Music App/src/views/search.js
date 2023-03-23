@@ -1,5 +1,7 @@
 import { search } from "../api/data.js";
-import { html, nothing } from "../lib.js";
+import { html, render, nothing } from "../lib.js";
+
+
 
 const searchTemplate = (onSearch) => html`       
 <section id="searchPage">
@@ -8,34 +10,35 @@ const searchTemplate = (onSearch) => html`
     <div class="search">
         <input id="search-input" type="text" name="search" placeholder="Enter desired albums's name">
         <button @click=${onSearch} class="button-list">Search</button>
-    </div>`;
+    </div>
+    <h2>Results:</h2>
+
+    <div class="search-result"></div>
+</section>`;
+    
 
 const resultTemplate = (albums, hasUser) => html`    
-<h2>Results:</h2>
 
-<!--Show after click Search button-->
-<div class="search-result">
-    ${hasUser}
-    <div class="card-box">
-        <img src="./images/BrandiCarlile.png">
+    ${albums.length == 0 
+    ? html`<p class="no-result">No result.</p>` 
+    : albums.map(alb => html`
+     <div class="card-box">
+        <img src=${alb.imgUrl}>
         <div>
             <div class="text-center">
-                <p class="name">Name: In These Silent Days</p>
-                <p class="artist">Artist: Brandi Carlile</p>
-                <p class="genre">Genre: Low Country Sound Music</p>
-                <p class="price">Price: $12.80</p>
-                <p class="date">Release Date: October 1, 2021</p>
+                <p class="name">Name: ${alb.name}</p>
+                <p class="artist">Artist: ${alb.artist}</p>
+                <p class="genre">Genre: ${alb.genre}</p>
+                <p class="price">Price: ${alb.price}</p>
+                <p class="date">Release Date: ${alb.releaseData}</p>
             </div>
-            <div class="btn-group">
-                <a href="#" id="details">Details</a>
-            </div>
+            ${hasUser 
+            ? html`<div class="btn-group">
+                <a href="/catalog/${alb._id}" id="details">Details</a>
+                </div>`
+            : nothing } 
         </div>
-    </div>
-
-    <!--If there are no matches-->
-    <p class="no-result">No result.</p>
-</div>
-</section>`;
+    </div>`)}`;
 
 export async function showSearch(ctx){
     ctx.render(searchTemplate(onSearch));
@@ -43,15 +46,16 @@ export async function showSearch(ctx){
     
     async function onSearch(event){ 
         const parent = event.target.parentElement;
-        const surchData = parent.querySelector('input');
+        const surchData = parent.querySelector('input').value.trim();
+        const root = document.querySelector('.search-result');
         
-        if(surchData.value == ''){
+        if(surchData == ''){
             return alert('The surchfield must be fieled!');
         };
         
         const hasUser = ctx.user;
-        const albums = await search(surchData.value);
+        const albums = await search(surchData);
 
-        ctx.render(resultTemplate(albums, hasUser))
+        render(resultTemplate(albums, hasUser), root);
     };
 };
