@@ -7,15 +7,15 @@ const searchTemplate = (onSearch) => html`
 
     <div class="search">
         <input id="search-input" type="text" name="search" placeholder="Enter desired albums's name">
-        <button  class="button-list">Search</button>
+        <button @click=${onSearch} class="button-list">Search</button>
     </div>`;
 
-const resultTemplate = () => html`    
+const resultTemplate = (albums, hasUser) => html`    
 <h2>Results:</h2>
 
 <!--Show after click Search button-->
 <div class="search-result">
-    <!--If have matches-->
+    ${hasUser}
     <div class="card-box">
         <img src="./images/BrandiCarlile.png">
         <div>
@@ -40,10 +40,18 @@ const resultTemplate = () => html`
 export async function showSearch(ctx){
     ctx.render(searchTemplate(onSearch));
     
-    const hasUser = ctx.user;
-    const albums = await search()
-
-    function onSearch(){
+    
+    async function onSearch(event){ 
+        const parent = event.target.parentElement;
+        const surchData = parent.querySelector('input');
         
-    }
+        if(surchData.value == ''){
+            return alert('The surchfield must be fieled!');
+        };
+        
+        const hasUser = ctx.user;
+        const albums = await search(surchData.value);
+
+        ctx.render(resultTemplate(albums, hasUser))
+    };
 };
