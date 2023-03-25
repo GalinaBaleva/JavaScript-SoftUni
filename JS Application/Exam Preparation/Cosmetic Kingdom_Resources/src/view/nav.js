@@ -1,4 +1,5 @@
-import { html } from "../lib.js";
+import { html, render, page } from "../lib.js";
+import { getUserData } from "../util.js";
 
 const rootNav = document.querySelector('nav');
 
@@ -9,7 +10,7 @@ const navTemplate = (hasUser) => html`
 ${hasUser ? html`
 <div class="user">
     <a href="/create">Add Product</a>
-    <a href="/logout">Logout</a>
+    <a @click=${onLogout} href="javascript:void(0)">Logout</a>
 </div>` 
 : html`
 <div class="guest">
@@ -17,8 +18,13 @@ ${hasUser ? html`
     <a href="/register">Register</a>
 </div>`}`;
 
-async function showNav(ctx){
-    
+export async function updateNav(){
+    const user = getUserData();
+    render(navTemplate(user), rootNav);
+};
+
+async function onLogout(){
+
 }
 
 

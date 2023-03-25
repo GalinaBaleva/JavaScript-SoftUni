@@ -1,0 +1,40 @@
+import { html, render, nothing, page } from './lib.js';
+import { getUserData } from './util.js';
+import { showHome } from './view/home.js';
+import { updateNav } from './view/nav.js';
+import { showRegister } from './view/register.js';
+
+const root = document.querySelector('main');
+
+
+page(decorationContext);
+page('/', showHome);
+page('/catalog', () => console.log('Catalog'));
+page('/register', showRegister);
+page('/login', () => console.log('Login'));
+page('/register', () => console.log('Register'));
+page('/create', () => console.log('Create'));
+page('/catalog/:id', () => console.log('Details'));
+page('/edit/:id', () => console.log('Edit'));
+
+updateNav();
+page.start();
+
+function decorationContext(ctx, next) {
+    ctx.render = renderMein;
+    ctx.updateNav = updateNav;
+
+    const user = getUserData();
+
+    if (user) {
+        ctx.user = user;
+    };
+
+    next();
+};
+
+function renderMein(content) {
+    render(content, root);
+};
+
+
