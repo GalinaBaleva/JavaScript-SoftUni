@@ -1,5 +1,5 @@
 export function getUserData(){
-    const userData = sessionStorage.getItem('userData');
+    const userData = JSON.parse(sessionStorage.getItem('userData'));
     return userData;
 };
 

@@ -1,6 +1,8 @@
 import { html, render, nothing, page } from './lib.js';
 import { getUserData } from './util.js';
+import { showCatalog } from './view/catalog.js';
 import { showHome } from './view/home.js';
+import { showLogin } from './view/login.js';
 import { updateNav } from './view/nav.js';
 import { showRegister } from './view/register.js';
 
@@ -9,9 +11,9 @@ const root = document.querySelector('main');
 
 page(decorationContext);
 page('/', showHome);
-page('/catalog', () => console.log('Catalog'));
+page('/catalog', showCatalog);
 page('/register', showRegister);
-page('/login', () => console.log('Login'));
+page('/login', showLogin);
 page('/register', () => console.log('Register'));
 page('/create', () => console.log('Create'));
 page('/catalog/:id', () => console.log('Details'));
