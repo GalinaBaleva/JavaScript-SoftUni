@@ -1,6 +1,7 @@
 import { html, render, nothing, page } from './lib.js';
 import { getUserData } from './util.js';
 import { showCatalog } from './view/catalog.js';
+import { showDetails } from './view/details.js';
 import { showHome } from './view/home.js';
 import { showLogin } from './view/login.js';
 import { updateNav } from './view/nav.js';
@@ -12,11 +13,11 @@ const root = document.querySelector('main');
 page(decorationContext);
 page('/', showHome);
 page('/catalog', showCatalog);
+page('/catalog/:id', showDetails);
 page('/register', showRegister);
 page('/login', showLogin);
 page('/register', () => console.log('Register'));
 page('/create', () => console.log('Create'));
-page('/catalog/:id', () => console.log('Details'));
 page('/edit/:id', () => console.log('Edit'));
 
 updateNav();

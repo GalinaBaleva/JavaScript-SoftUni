@@ -3,7 +3,7 @@ const { expect } = require("chai");
 
 const host = "http://localhost:3000"; // Application host (NOT service host - that can be anything)
 const interval = 600;
-const DEBUG = false;
+const DEBUG = true;
 const slowMo = 500;
 
 const mockData = require("./mock-data.json");
@@ -414,7 +414,7 @@ describe("E2E tests", function () {
       expect(description).to.contains(data.description);
     });
 
-    it("Non-author does NOT see delete and edit buttons [ 2.5 Points ]", async () => {
+    it.only("Non-author does NOT see delete and edit buttons [ 2.5 Points ]", async () => {
       const data = mockData.catalog[2];
       const user = mockData.users[0];
       const { get } = await handle(endpoints.details(data._id));
