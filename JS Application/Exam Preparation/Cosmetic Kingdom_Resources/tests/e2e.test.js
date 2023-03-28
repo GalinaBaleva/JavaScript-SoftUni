@@ -414,7 +414,7 @@ describe("E2E tests", function () {
       expect(description).to.contains(data.description);
     });
 
-    it.only("Non-author does NOT see delete and edit buttons [ 2.5 Points ]", async () => {
+    it("Non-author does NOT see delete and edit buttons [ 2.5 Points ]", async () => {
       const data = mockData.catalog[2];
       const user = mockData.users[0];
       const { get } = await handle(endpoints.details(data._id));
