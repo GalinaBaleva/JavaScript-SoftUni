@@ -12,14 +12,16 @@ export function clearUserData(){
 };
 
 
-export function createSubmitHandler(callback){
-    return function (event){
-        event.preventDefault();
 
-        const formData = new FormData(event.target);
+
+export function createSubmitHandler(callback){
+    return function(event){
+        event.preventDefault();
+        const formData = new  FormData(event.target);
         const data = Object.fromEntries(formData);
 
-        callback(data, event.target);
+        
 
+        callback(data, event.target); // event.target if we want to reset the formData
     };
 };
