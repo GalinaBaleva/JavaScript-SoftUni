@@ -27,6 +27,6 @@ export async function createNewProduct(product){
 };
 
 export async function editProduct(product, id){
-    return put(entpoints.getById + id);
+    return put(entpoints.getById + id, product);
 };
 
