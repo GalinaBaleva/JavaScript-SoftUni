@@ -37,9 +37,14 @@ export async function showDetails(ctx) {
 
     ctx.render(detailsTemplate(hasUser, isOwner, album, onDelete));
 
-    async function onDelete(){
-        deleteAlbum(id);
+    async function onDelete() {
+        const condirmed = confirm('Are you sure?');
 
-        ctx.page.redirect('/catalog');
+        if (condirmed) {
+            deleteAlbum(id);
+
+            ctx.page.redirect('/catalog');
+        };
+
     };
 }
