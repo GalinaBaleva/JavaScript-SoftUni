@@ -16,7 +16,7 @@ const catalogTemplate = (albums) => html`
                     <strong>Album name: </strong><span class="album">${album.album}</span>
                 </p>
                 <p><strong>Sales:</strong><span class="sales">${album.sales}</span></p>
-                <a class="details-btn" href="">Details</a>
+                <a class="details-btn" href="/detail/${album._id}">Details</a>
             </li>
        `)}`
         : html`<h2>There are no albums added yet.</h2>`}
