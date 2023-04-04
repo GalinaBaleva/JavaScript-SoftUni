@@ -1,4 +1,5 @@
-import { html, render } from "../lib.js";
+import { logout } from "../api/user.js";
+import { html, render, page } from "../lib.js";
 import { getUserData } from "../util.js";
 
 const navRoot = document.querySelector('nav');
@@ -26,5 +27,7 @@ export function updateNav() {
 };
 
 function onLogout(){
-    console.log('Logout');
+    logout();
+    updateNav();
+    page.redirect('/');
 };
