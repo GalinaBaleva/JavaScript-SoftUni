@@ -20,3 +20,7 @@ export async function createShoes(shoesData){
 export async function editShoes(result, id){
     return await put('/data/shoes/' + id, result);
 };
+
+export async function search(query){
+    return await get(`/data/shoes?where=brand%20LIKE%20%22${query}%22`);
+}
