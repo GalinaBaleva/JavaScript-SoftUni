@@ -1,7 +1,8 @@
-import {deleteById, getById} from "../api/data.js";
+import { allComments, deleteById, getById, newComment } from "../api/data.js";
 import { html, nothing } from "../lib.js";
+import { createSubmitHandler } from "../util.js";
 
-const detailsTemplate = (hasUser, isOwner, game, onDelete) => html`
+const detailsTemplate = (hasUser, isOwner, game, onDelete, comments, postNewComment) => html`
         <section id="game-details">
             <h1>Game Details</h1>
             <div class="info-section">
@@ -18,17 +19,14 @@ const detailsTemplate = (hasUser, isOwner, game, onDelete) => html`
                 <!-- Bonus ( for Guests and Users ) -->
                 <div class="details-comments">
                     <h2>Comments:</h2>
-                    <ul>
-                        <!-- list all comments for current game (If any) -->
-                        <li class="comment">
-                            <p>Content: I rate this one quite highly.</p>
-                        </li>
-                        <li class="comment">
-                            <p>Content: The best game.</p>
-                        </li>
-                    </ul>
-                    <!-- Display paragraph: If there are no games in the database -->
-                    <p class="no-comment">No comments.</p>
+                ${comments.length == 0
+        ? html`<p class="no-comment">No comments.</p>`
+        : html`<ul>
+                            ${comments.map(c => html`
+                       <li class="comment">
+                           <p>${c.comment}</p>
+                       </li>`)}
+                        </ul>`} 
                 </div>
 
                 <!-- Edit/Delete buttons ( Only for creator of this game )  -->
@@ -41,26 +39,30 @@ const detailsTemplate = (hasUser, isOwner, game, onDelete) => html`
 
             <!-- Bonus -->
             <!-- Add Comment ( Only for logged-in users, which is not creators of the current game ) -->
-            <article class="create-comment">
+            ${!hasUser || isOwner ? nothing : html`
+             <article class="create-comment">
                 <label>Add new comment:</label>
-                <form class="form">
+                <form @submit=${postNewComment} class="form">
                     <textarea name="comment" placeholder="Comment......"></textarea>
                     <input class="btn submit" type="submit" value="Add Comment">
                 </form>
-            </article>
+            </article>`}
+           
 
         </section>`;
 
 export async function showDetails(ctx) {
     const id = ctx.params.id;
     const game = await getById(id);
-    console.log(game)
 
     const hasUser = ctx.user;
     const isOwner = hasUser && hasUser._id == game._ownerId;
 
+    const comments = await allComments(id);
+    console.log(comments)
 
-    ctx.render(detailsTemplate(hasUser, isOwner, game, onDelete));
+
+    ctx.render(detailsTemplate(hasUser, isOwner, game, onDelete, comments, createSubmitHandler(postNewComment)));
 
     async function onDelete() {
         const condirmed = confirm('Are you sure?');
@@ -70,5 +72,22 @@ export async function showDetails(ctx) {
 
             ctx.page.redirect('/catalog');
         };
+    };
+
+    async function postNewComment(data, form) {
+        const newData = [...Object.values(data)].map(d => d.trim());
+
+        if(newData.some(d => d == '')){
+            return alert('Comment field is required!');
+        };
+
+        const result = {
+            comment: newData[0],
+            gameId: id
+        }
+
+        await newComment(result);
+        form.reset();
+        ctx.page.redirect('/details/' + id);
     };
 };

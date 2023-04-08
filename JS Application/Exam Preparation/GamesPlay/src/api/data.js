@@ -25,3 +25,11 @@ export async function edit(game, id){
     return await put('/data/games/' + id, game);
 };
 
+export async function allComments(gameId){
+    return await get(`/data/comments?where=gameId%3D%22${gameId}%22`);
+};
+
+export async function newComment(commentData){
+    return await post('/data/comments', commentData);
+};
+
