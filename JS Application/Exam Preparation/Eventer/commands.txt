@@ -1,0 +1,9 @@
+npm init
+npm i chai
+npm i page
+npm i playwright-chromium
+npm i lit-html
+cd server
+node server.js
+npm run start
+<script src="/src/app.js" type="module"></script>
