@@ -1,7 +1,7 @@
-import { deleteById, getById } from "../api/data.js";
+import { deleteById, getById, postNew, totalBought, userBought } from "../api/data.js";
 import { html, nothing } from "../lib.js";
 
-const detailsTemplate = (isOwner, hasUser, cartData, onDelete) => html`
+const detailsTemplate = (isOwner, hasUser, cartData, onDelete, all, usersBuy, onBuy) => html`
         <section id="details">
             <div id="details-wrapper">
                 <img id="details-img" src="${cartData.imageUrl}" alt="example1" />
@@ -13,15 +13,15 @@ const detailsTemplate = (isOwner, hasUser, cartData, onDelete) => html`
                     Price: <span id="price-number">${cartData.price}</span>$</p>
                 <div id="info-wrapper">
                     <div id="details-description">
-                        <h4>Bought: <span id="buys">0</span> times.</h4>
+                        <h4>Bought: <span id="buys">${all}</span> times.</h4>
                         <span>${cartData.description}</span>
                     </div>
                 </div>
                 
                 <!--Edit and Delete are only for creator-->
                 <div id="action-buttons">
-                    ${hasUser && !isOwner
-                        ? html`<a href="" id="buy-btn">Buy</a>` 
+                    ${hasUser && !isOwner && usersBuy < 1
+                        ? html`<a @click=${onBuy} href="javascript:void(0)" id="buy-btn">Buy</a>` 
                         : nothing}
                     ${hasUser && isOwner 
                         ? html`<a href="/edit/${cartData._id}" id="edit-btn">Edit</a>
@@ -39,9 +39,12 @@ export async function showDetails(ctx) {
     const cartData = await getById(id);
 
     const hasUser = Boolean(ctx.user);
-    const isOwner = Boolean(ctx.user && cartData._ownerId == ctx.user._id)
+    const isOwner = Boolean(ctx.user && cartData._ownerId == ctx.user._id);
 
-    ctx.render(detailsTemplate(isOwner, hasUser, cartData, onDelete));
+    const all = await totalBought(id);
+    const usersBuy = await userBought(id, ctx.user._id);
+
+    ctx.render(detailsTemplate(isOwner, hasUser, cartData, onDelete, all, usersBuy, onBuy));
 
     async function onDelete(){
         const confirmed = confirm('Are you sure!');
@@ -51,4 +54,11 @@ export async function showDetails(ctx) {
             ctx.page.redirect('/catalog');
         }
     };
+
+    async function onBuy(){
+        await postNew(id);
+
+        ctx.page.redirect('/details/' + id);
+    };
+    
 };

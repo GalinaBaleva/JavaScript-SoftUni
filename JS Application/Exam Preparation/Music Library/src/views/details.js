@@ -1,7 +1,7 @@
-import { deleteAlbum, getById } from "../api/data.js";
+import { deleteAlbum, getAllLikes, getById, getUserLike, like } from "../api/data.js";
 import { html, nothing } from "../lib.js";
 
-const detailsTemplate = (hasUser, isOwner, album, onDelete) => html`
+const detailsTemplate = (hasUser, isOwner, album, onDelete, onLike, getLikes, getUserLikes) => html`
     <section id="details">
         <div id="details-wrapper">
             <p id="details-title">Album Details</p>
@@ -17,10 +17,10 @@ const detailsTemplate = (hasUser, isOwner, album, onDelete) => html`
                 <p><strong>Label:</strong><span id="details-label">${album.label}</span></p>
                 <p><strong>Sales:</strong><span id="details-sales">${album.sales}</span></p>
             </div>
-            <div id="likes">Likes: <span id="likes-count">0</span></div>
+            <div id="likes">Likes: <span id="likes-count">${getLikes}</span></div>
     
             <div id="action-buttons">
-                ${hasUser && !isOwner ? html` <a href="" id="like-btn">Like</a>` : nothing}
+                ${hasUser && !isOwner && getUserLikes < 1 ? html` <a @click=${onLike} href="javascript:void(0)" id="like-btn">Like</a>` : nothing}
                 ${isOwner ? html`
                 <a href="/edit/${album._id}" id="edit-btn">Edit</a>
                 <a @click=${onDelete} href="javascript:void(0)" id="delete-btn">Delete</a>` : nothing}
@@ -35,7 +35,11 @@ export async function showDetails(ctx) {
     const hasUser = ctx.user;
     const isOwner = hasUser && hasUser._id == album._ownerId;
 
-    ctx.render(detailsTemplate(hasUser, isOwner, album, onDelete));
+    const getLikes = await getAllLikes(id);
+
+    const getUserLikes = await getUserLike(hasUser._id, id);
+
+    ctx.render(detailsTemplate(hasUser, isOwner, album, onDelete, onLike, getLikes, getUserLikes));
 
     async function onDelete() {
         const condirmed = confirm('Are you sure?');
@@ -45,6 +49,12 @@ export async function showDetails(ctx) {
 
             ctx.page.redirect('/catalog');
         };
-
     };
-}
+
+    async function onLike(){
+        await like(id);
+        ctx.page.redirect('/detail/' + id);
+    };
+
+    
+};
